@@ -3,6 +3,8 @@ import Link from 'next/link';
 import styles from '../styles/About.module.css';
 import Navbar from './component/Navbar';
 
+const briefcaseIcon = require('/public/icons/briefcase-icon.svg')
+
 type contactItem = {
   key: number,
   icon: string,
@@ -19,6 +21,10 @@ const contact_list: contactItem[] = [
   {
     key: 2, alt_icon: 'linkdn icon', value: 'nabeel403', link: '/',
     icon: require('/public/icons/linkdin-icon.svg')
+  },
+  {
+    key: 3, alt_icon: 'Twitter Icon', value: 'Nabeel403', link: 'https://twitter.com/Nabeel403',
+    icon: require('/public/icons/twitter-icon.svg')
   },
 ]
 
@@ -42,48 +48,64 @@ export default function About() {
       <Navbar />
       <main className='main'>
         <section className="intro-section">
-          <p>My name is Nabeel kahlil Maulana</p>
+          {/* <p>My name is Nabeel kahlil Maulana</p> */}
         </section>
 
         <div className={styles.contactContainer}>
           {contact_list.map(contact => renderContactItem(contact))}
         </div>
 
-        <div className='experience-section'>
-          list experience here
-          <div className="job-container">
-            <div className='job-icon-area'>
-              <Image alt='btpn icon' src='' />
+        <section className='experience-section'>
+          {/* list job experience here */}
+          <h1>Job Experience</h1>
+          <div className={styles.jobContainer}>
+            <div className={styles.iconArea}>
+              <Image src={require('/public/icons/briefcase-icon.svg')} alt='btpn icon' width={50} height={50}/>
             </div>
             <div className="job-description">
-              <h3>PT Bank BPTN</h3>
-              <p className='job-desc-period'> February 2021 - February 2022</p>
-              <p className='job-decs-title'>Fullstack Developer</p>
+              <p className={styles.descPeriod}> February 2021 - February 2022</p>
+              <h2 className={styles.descInstitution}>PT Bank BPTN tbk.</h2>
               <p className='job-desc-text'>
-                Contribute on building Content Management System (CMS) by adding 
+                Working as <b>Fullstack Developer Intern</b> and contribute on building Content Management System (CMS) by adding 
                 and updating features from given requirements. 
                 Colaborate as a team in agile development workflow.
-                Apply visual on frontend and manage CRUD from database in multiple microservices.
+                Apply visual features on frontend and manage data from database in multiple microservices.
               </p>
-              <ul className='job-desc-points'>
+              <ul className={styles.descUlPoints}>
                 <li> Using MERN (MongoDB, ExpressJS, React, NodeJS)</li>
-                <li> Contribute to multiple PWA sites</li>
-                <li> Test Driven Developemnt</li>
-                <li> Partake as Quality Assurance</li>
+                <li> Contribute to multiple Progressive Web Apps</li>
+                <li> Develop using Test Driven Developemnt</li>
+                <li> Partake role of Quality Assurance</li>
                 <li> Build a personal software that automate testing using <Link target='_blank' href='https://github.com/chawza/excel2docx'>excel2web</Link></li>
+                <li> awarded as one of the "Best Intern 2021"</li>
               </ul>
             </div>
-          </div>
-        </div>
-        <div className="education-section">
-          list education history here
-        </div>
+          </div>                             
+        </section>
+
+        <section className={styles.educationSection}>
+          {/* list education history here */}
+          <h1>Bina Nusantara University</h1>
+          <div className={styles.educationItemContainer}>
+            <div className={styles.iconArea}>
+              <Image src={require('/public/icons/briefcase-icon.svg')} alt='btpn icon' width={50} height={50}/>
+            </div>
+            <div className={styles.educationDescriptionArea}>
+              <p className={styles.descPeriod}> 2018 - 2022</p>
+              <h2 className={styles.descInstitution}>PT Bank BPTN tbk.</h2>
+              <p> Faculty of Computer Science </p>
+              <p> Majoring in Intelligence System</p>
+              <p> GPA 3.47 </p>
+            </div>
+          </div>                             
+        </section>
+
         <div className="skill-section">
           <div className="software-section">
-            list software skill
+            {/* list software skill */}
           </div>
           <div className="language-section">
-            list language skill
+            {/* list language skill */}
           </div>
         </div>
       </main>

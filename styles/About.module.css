@@ -1,8 +1,10 @@
+/* Page  */
 .contactContainer {
   display: flex;
   flex-direction: row;
   gap: 20px;
   justify-items: center;
+  margin-bottom: 3rem;
 }
 
 .contactItem {
@@ -12,4 +14,46 @@
   gap: 6px;
 }
 
-job
+.contactItem p {
+  text-decoration: none;
+}
+
+.educationSection {
+  width: 100%;
+}
+
+/* content styling */
+
+.jobContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem
+}
+
+.educationItemContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem
+}
+
+.iconArea {
+  padding-top: 2rem;
+}
+
+.descPeriod {
+  opacity: 50%;
+  margin-bottom: .5rem; 
+  font-size: .9rem;
+}
+
+.descInstitution {
+  margin-top: 0;
+}
+
+.descUlPoints {
+  padding: 0 0 0 20px;
+}
+
+.educationDescriptionArea  p {
+  margin: 0 0 .3rem 0;
+}
