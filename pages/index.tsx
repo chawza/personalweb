@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/index.module.css'
 import Link from 'next/link';
+import Navbar from './component/Navbar';
 
 export default function Home() {
   return (
@@ -10,6 +10,7 @@ export default function Home() {
         <title>Nabeel</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navbar/>
 
       <main className={styles.main}>
         <h1 className='h1'>

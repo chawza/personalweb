@@ -1,5 +1,15 @@
-.contactRow {
+.contactContainer {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  justify-items: center;
 }
+
+.contactItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+job
