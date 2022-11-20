@@ -18,8 +18,29 @@
   text-decoration: none;
 }
 
-.educationSection {
+/* section */
+.sectionItem {
   width: 100%;
+}
+
+.sectionItem ul {
+  padding-left: 1.5rem;
+}
+
+.sectionArea {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: 1rem;
+}
+
+.sectionContent {
+  min-width: 50%;
+}
+
+.heading1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* content styling */
@@ -27,13 +48,15 @@
 .jobContainer {
   display: flex;
   flex-direction: row;
-  gap: 1rem
+  gap: 1rem;
+  margin: 0 0 3rem 1rem;
 }
 
 .educationItemContainer {
   display: flex;
   flex-direction: row;
-  gap: 1rem
+  gap: 1rem;
+  margin: 0 0 1rem 1rem;
 }
 
 .iconArea {

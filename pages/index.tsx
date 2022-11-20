@@ -20,8 +20,8 @@ export default function Home() {
 
         <div>
           <p>
-            Welcome to my personal website. This is where you can find information about me. I post articles on various
-            topic in my {<Link href=''>Blog</Link>} that discuss about programming, machine learning, books, and other stuff you might interest.
+            Welcome to my website. This is where you can find information about me. I post articles on various
+            topic in my {<Link href=''>Blog</Link>} that discusses about programming, machine learning, books, and other stuff you might interested.
           </p>
           <p>
             if you want to hire me, you can download my {<Link href=''>cv</Link>} or find more about me {<Link href='/about'>Here</Link>}

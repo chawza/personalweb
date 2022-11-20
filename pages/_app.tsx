@@ -1,9 +1,11 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
+import { Roboto } from '@next/font/google'
+
+const robotFont = Roboto({weight: '400'})
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+  return <main className={robotFont.className}>
     <Component {...pageProps} />
-  </>
+  </main>
 }
