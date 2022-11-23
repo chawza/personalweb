@@ -28,7 +28,7 @@ interface staticPropsParams extends ParsedUrlQuery{
 
 export const getStaticProps: GetStaticProps<staticProps, staticPropsParams> = async (context) => {
   const { id : postId} = context.params!
-  const post = await getPostDetail(postId);
+  const post = await getPostDetail(parseInt(postId));
   return {
     props: {
       post

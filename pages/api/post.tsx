@@ -32,9 +32,15 @@ interface PostIdsQuerry extends RowDataPacket {
   row: number[]
 }
 
-export async function getRecentPost(page?: number, content: boolean = false) {
+export async function getRecentPost(page?: number, content: boolean = false, limit?: number) {
   const qPage = page || 1;
-  const qLimit = `${(qPage - 1) * POST_PER_PAGE}, ${(qPage * POST_PER_PAGE) - 1}`;
+  let qLimit = ''
+  if (limit) {
+    const leftIdx = (qPage - 1) * POST_PER_PAGE;
+    qLimit = `${leftIdx}, ${leftIdx + limit}`;
+  } else {
+    qLimit = `${(qPage - 1) * POST_PER_PAGE}, ${(qPage * POST_PER_PAGE) - 1}`;
+  }
   const qContent = content ? ', post.content' : '';
 
   const query = `
@@ -44,7 +50,7 @@ export async function getRecentPost(page?: number, content: boolean = false) {
     FROM post
     INNER JOIN user on post.author_id = user.id
     WHERE post.author_id = (SELECT id FROM user WHERE user.username = '${process.env['BLOG_OWNER_USERNAME']}')
-    ORDER BY add_date DESC LIMIT ${qLimit};
+    ORDER BY add_date DESC LIMIT ${limit || qLimit};
   `;
 
   const [row, _] = await (await conn).query<PostQuery[]>(query);

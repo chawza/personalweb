@@ -5,7 +5,7 @@ import { Roboto } from '@next/font/google'
 const robotFont = Roboto({weight: '400'})
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <main className={robotFont.className}>
+  return <div className={robotFont.className}>
     <Component {...pageProps} />
-  </main>
+  </div>
 }
