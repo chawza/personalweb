@@ -5,5 +5,5 @@ export interface Post {
   content: string,
   add_date: Date,
   last_edit: Date,
-  tag: [string],
+  tag: string[] | null,
 }

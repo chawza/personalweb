@@ -1,7 +1,16 @@
 import { Post } from "../../types/post";
+import mysql from 'mysql2/promise';
+import { RowDataPacket } from 'mysql2';
 
-const SERVER_HOST = process.env['SERVER_HOST'];
-const SERVER_BLOG_API_ROUTE = process.env['BLOG_API_ROUTE'];
+const POST_PER_PAGE = 10;
+
+const conn = mysql.createConnection({
+  host      : process.env['DB_CONN_HOSTNAME'],
+  user      : process.env['DB_USERNAME'],
+  password  : process.env['DB_PASSWORD'],
+  database  : process.env['DB_NAME'],
+  port      : parseInt(process.env['DB_CONN_PORT']!)
+})
 
 async function fetchHandler(url: URL, method = 'GET'){
   const res = await fetch(
@@ -18,28 +27,54 @@ async function fetchHandler(url: URL, method = 'GET'){
   return res;
 };
 
-export async function getRecentPost(page: string | undefined, limit?: number) {
-  const url = new URL(`${SERVER_HOST}/${SERVER_BLOG_API_ROUTE}/posts`);
-  url.searchParams.append('page', page == undefined ? '1' : page);
-  if (limit) url.searchParams.append('limit', limit.toString());
+interface PostQuery extends RowDataPacket, Post {};
+interface PostIdsQuerry extends RowDataPacket {
+  row: number[]
+}
+
+export async function getRecentPost(page?: number, content: boolean = false) {
+  const qPage = page || 1;
+  const qLimit = `${(qPage - 1) * POST_PER_PAGE}, ${(qPage * POST_PER_PAGE) - 1}`;
+  const qContent = content ? ', post.content' : '';
+
+  const query = `
+    select
+      post.id, post.title${qContent}, post.add_date,
+      post.last_edit, post.tag, user.username as author
+    from post
+    inner join user on post.author_id = user.id
+    order by add_date desc limit ${qLimit};
+  `;
+
+  const [row, _] = await (await conn).query<PostQuery[]>(query);
+  let posts = row.map(post => {
+    return {
+      ...post,
+      add_date:  post.add_date.toString(),
+      last_edit: post.last_edit.toString(),
+    }
+  })
   
-  const res = await fetchHandler(url);
-  const body = await res.json();
-  return {
-    posts: body.posts
-  };
+  return posts;
 };
 
 export async function getAllPostIds(): Promise<number[]> {
-  const url = new URL(`${SERVER_HOST}/${SERVER_BLOG_API_ROUTE}/postids`);
-  const res = await fetchHandler(url);
-  const body = await res.json();
-  return body.ids;
+  const query = 'SELECT post.id from post;'
+  const [row, _] = await (await conn).query<PostIdsQuerry[]>(query);
+
+  const ids = row.map(post => post.id)
+  return ids;
 }
 
-export async function getPostDetail(postId: string): Promise<Post> {
-  const url = new URL(`${SERVER_HOST}/${SERVER_BLOG_API_ROUTE}/post/${postId}`);
-  const res = await fetchHandler(url);
-  const body = await res.json();
-  return body.post;
+export async function getPostDetail(postId: number): Promise<Post> {
+  const query = `
+    select
+      post.id, post.title, post.content, post.add_date,
+      post.last_edit, post.tag, user.username as author
+    from post
+    inner join user on post.author_id = user.id
+    where post.id = ${postId}`;
+  const [row, _] = await (await conn).query<PostQuery[]>(query);
+  let post = row[0];
+  return JSON.parse(JSON.stringify(post)) // Serialize Date
 }

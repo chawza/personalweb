@@ -9,11 +9,9 @@ interface blogPageProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const page = context.query['page'];
-  const result = await getRecentPost(page?.toString());
-
-  const { posts } = result;
-  return { props: {posts: posts } };
+  let page = context.query?.page || '1';
+  const posts = await getRecentPost(parseInt(page.toString()));
+  return { props: { posts } };
 }
 
 const BlogPage: NextPage<blogPageProps> = (props) => {
