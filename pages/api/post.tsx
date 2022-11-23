@@ -38,12 +38,13 @@ export async function getRecentPost(page?: number, content: boolean = false) {
   const qContent = content ? ', post.content' : '';
 
   const query = `
-    select
+    SELECT
       post.id, post.title${qContent}, post.add_date,
       post.last_edit, post.tag, user.username as author
-    from post
-    inner join user on post.author_id = user.id
-    order by add_date desc limit ${qLimit};
+    FROM post
+    INNER JOIN user on post.author_id = user.id
+    WHERE post.author_id = (SELECT id FROM user WHERE user.username = '${process.env['BLOG_OWNER_USERNAME']}')
+    ORDER BY add_date DESC LIMIT ${qLimit};
   `;
 
   const [row, _] = await (await conn).query<PostQuery[]>(query);
@@ -59,7 +60,13 @@ export async function getRecentPost(page?: number, content: boolean = false) {
 };
 
 export async function getAllPostIds(): Promise<number[]> {
-  const query = 'SELECT post.id from post;'
+  const query = `
+    SELECT post.id
+    from post
+    WHERE post.author_id = (
+      SELECT id FROM user WHERE user.username = '${process.env['BLOG_OWNER_USERNAME']}'
+    );
+  `
   const [row, _] = await (await conn).query<PostIdsQuerry[]>(query);
 
   const ids = row.map(post => post.id)
