@@ -45,7 +45,7 @@ const ArticlePage: NextPage<staticProps> = (props: staticProps) => {
       <h1>{post.title}</h1>
       <p>{post.add_date.toString()}</p>
       <div className="tag-container">
-        {post.tag?.map(tagname => <div>{tagname}</div>)}
+        {post.tag?.map((tagname, index) => <div key={`tag-${index}`}>{tagname}</div>)}
       </div>
       <div>
         {parse(HTMLString)}

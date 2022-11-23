@@ -33,7 +33,7 @@ function renderPostRow (post: Post) {
     <p>{formatDate(post.add_date)}</p>
     {
       post.tag && 
-        post.tag?.length > 0 && post.tag.map(tagname => <span>{tagname}</span>)
+        post.tag?.length > 0 && post.tag.map((tagname, index) => <span key={`tagname-${index}`}>{tagname}</span>)
     }
   </> 
 }
