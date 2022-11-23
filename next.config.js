@@ -6,8 +6,11 @@ const nextConfig = {
   //   unoptimized: true
   // },
   env: {
-    SERVER_HOST: 'http://localhost:5000',
-    BLOG_API_ROUTE: 'api/blog'
+    DB_USERNAME: '<DB_USERNAME>',
+    DB_PASSWORD: '<DB_PASSWORD>',
+    DB_CONN_HOSTNAME: '<DB_HOST_CONN>',
+    DB_CONN_PORT: '<DB_HOST_PORT>',
+    DB_NAME: '<OWNER_USERNAME_IN_DB>',
   }
 }
 
