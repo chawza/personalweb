@@ -41,7 +41,7 @@ export default function Home(props: HomeProps) {
           topic in my {<Link href='/blog'>Blog</Link>} that discusses about programming, machine learning, books, and other stuff you might interested.
         </p>
         <p>
-          if you want to hire me, you can download my {<Link href=''>CV</Link>} or find more about me {<Link href='/about'>Here</Link>}.
+          if you want to hire me, you can download my {<Link href=''>resume</Link>} or find more about me {<Link href='/about'>Here</Link>}.
         </p>
       </section>
       <section className={styles.postSection}>

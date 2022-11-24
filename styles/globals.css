@@ -9,10 +9,10 @@ body {
 }
 
 main {
-  padding: 2rem 0;
   justify-content: center;
   align-items: center;
   width: 40rem;
+  margin-bottom: 6rem;
 }
 
 a {
