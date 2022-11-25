@@ -1,16 +1,15 @@
 import { getRecentPost } from "../api/post"
 import Navbar from "../component/Navbar"
 import { Post } from '../../types/post'
-import { NextPage, GetServerSideProps } from 'next';
+import { NextPage, GetStaticProps } from 'next';
 import PostList from '../component/PostList';
 
 interface blogPageProps {
   posts: Post[]
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let page = context.query?.page || '1';
-  const posts = await getRecentPost(parseInt(page.toString()));
+export const getStaticProps: GetStaticProps = async () => {
+  const posts = await getRecentPost(false);
   return { props: { posts } };
 }
 

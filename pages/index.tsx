@@ -8,7 +8,7 @@ import { Post } from '../types/post';
 import styles from '../styles/home.module.css';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await getRecentPost(1, false, 3 );
+  const posts = await getRecentPost(false, 3);
   return {
     props: {
       posts
