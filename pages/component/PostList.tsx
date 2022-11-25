@@ -32,8 +32,7 @@ function renderPostRow (post: Post) {
     <h3><Link href={url}>{capitalFirstLtter(post.title)}</Link></h3>
     <p>{formatDate(post.add_date)}</p>
     {
-      post.tag && 
-        post.tag?.length > 0 && post.tag.map((tagname, index) => <span key={`tagname-${index}`}>{tagname}</span>)
+      !!post.tag && post.tag.map((tagname, index) => <span key={`tagname-${index}`}>{tagname}</span>)
     }
   </> 
 }
@@ -41,6 +40,6 @@ function renderPostRow (post: Post) {
 export default function PostList(props: postListProps) {
   const { posts } = props;
   return <div>
-    {posts.map((post, index) => <div key={index}>{renderPostRow(post)}</div>)}
+    {posts && posts.map((post, index) => <div key={index}>{renderPostRow(post)}</div>)}
   </div>
 }

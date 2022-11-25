@@ -49,10 +49,12 @@ export async function getRecentPost(content = true, limit?: number) {
 
   const [row, _] = await (await conn).query<PostQuery[]>(query);
   let posts = row.map(post => {
+    const tag = post.tag ? JSON.parse(post.tag.toString()) : null
     return {
       ...post,
       add_date:  post.add_date.toString(),
       last_edit: post.last_edit.toString(),
+      tag
     }
   })
   
@@ -83,5 +85,6 @@ export async function getPostDetail(postId: number): Promise<Post> {
     where post.id = ${postId}`;
   const [row, _] = await (await conn).query<PostQuery[]>(query);
   let post = row[0];
+  post.tag = post.tag ? JSON.parse(post.tag.toString()) : null;
   return JSON.parse(JSON.stringify(post)) // Serialize Date
 }
