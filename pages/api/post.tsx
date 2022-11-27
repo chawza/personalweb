@@ -2,8 +2,6 @@ import { Post } from "../../types/post";
 import mysql from 'mysql2/promise';
 import { RowDataPacket } from 'mysql2';
 
-const POST_PER_PAGE = 10;
-
 const conn = mysql.createConnection({
   host      : process.env['DB_CONN_HOSTNAME'],
   user      : process.env['DB_USERNAME'],
@@ -48,17 +46,13 @@ export async function getRecentPost(content = true, limit?: number) {
   `;
 
   const [row, _] = await (await conn).query<PostQuery[]>(query);
-  let posts = row.map(post => {
-    const tag = post.tag ? JSON.parse(post.tag.toString()) : null
+  return row.map(post => {
     return {
       ...post,
       add_date:  post.add_date.toString(),
       last_edit: post.last_edit.toString(),
-      tag
     }
-  })
-  
-  return posts;
+})
 };
 
 export async function getAllPostIds(): Promise<number[]> {
