@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next';
 import Head from 'next/head'
 import Link from 'next/link';
 import Image from 'next/image';
-import { getRecentPost } from './api/post';
+import { getRecentPost } from '../db/blog/post';
 import Navbar from './component/Navbar';
 import PostList from './component/PostList';
 import { Post } from '../types/post';

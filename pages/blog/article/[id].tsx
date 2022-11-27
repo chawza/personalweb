@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import { getAllPostIds, getPostDetail } from "../../api/post";
+import { getAllPostIds, getPostDetail } from "../../../db/blog/post";
 import { Post } from "../../../types/post";
 import Navbar from "../../component/Navbar";
 import parse from 'html-react-parser';

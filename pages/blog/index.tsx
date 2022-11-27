@@ -1,4 +1,4 @@
-import { getRecentPost } from "../api/post"
+import { getRecentPost } from "../../db/blog/post"
 import Navbar from "../component/Navbar"
 import { Post } from '../../types/post'
 import { NextPage, GetStaticProps } from 'next';

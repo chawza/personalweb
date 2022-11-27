@@ -1,6 +1,6 @@
 import { Post } from "../../types/post";
 import mysql from 'mysql2/promise';
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 const conn = mysql.createConnection({
   host      : process.env['DB_CONN_HOSTNAME'],
@@ -9,6 +9,11 @@ const conn = mysql.createConnection({
   database  : process.env['DB_NAME'],
   port      : parseInt(process.env['DB_CONN_PORT']!)
 })
+
+interface PostQuery extends RowDataPacket, Post {};
+interface PostIdsQuerry extends RowDataPacket {
+  row: number[]
+}
 
 async function fetchHandler(url: URL, method = 'GET'){
   const res = await fetch(
@@ -24,11 +29,6 @@ async function fetchHandler(url: URL, method = 'GET'){
   }
   return res;
 };
-
-interface PostQuery extends RowDataPacket, Post {};
-interface PostIdsQuerry extends RowDataPacket {
-  row: number[]
-}
 
 export async function getRecentPost(content = true, limit?: number) {
   const qContent = content ? ', post.content' : '';
@@ -80,4 +80,21 @@ export async function getPostDetail(postId: number): Promise<Post> {
   const [row, _] = await (await conn).query<PostQuery[]>(query);
   let post = row[0];
   return JSON.parse(JSON.stringify(post)) // Serialize Date
+}
+
+export async function addNewPost(
+  title: string, content: string, tag: string[] | null
+): Promise<number> {
+  const qTag = tag ? JSON.stringify(tag): null;
+  const query = `
+    INSERT INTO post (title, content, tag, author_id) VALUES(
+      '${title}',
+      '${content}',
+      '${qTag}',
+      (SELECT id FROM user WHERE username='${process.env['BLOG_OWNER_USERNAME']}')
+    );
+  `
+  const [result, _] = await (await conn).execute<ResultSetHeader>(query)
+  const { insertId } = result;
+  return insertId;
 }
