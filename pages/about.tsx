@@ -10,45 +10,6 @@ const icons = {
   rocket: require('/public/icons/rocket-icon.svg')
 }
 
-type contactItem = {
-  key: number,
-  icon: string,
-  alt_icon: string,
-  value: string,
-  link: string | undefined
-}
-
-const contact_list: contactItem[] = [
-  {
-    key: 1, alt_icon: 'email icon', value: 'nabeelkahlil403@gmail.com', link: '/',
-    icon: require('/public/icons/email-icon.svg')
-  },
-  {
-    key: 2, alt_icon: 'linkdn icon', value: 'nabeel403', link: 'https://www.linkedin.com/in/nabeel403/',
-    icon: require('/public/icons/linkdin-icon.svg')
-  },
-  {
-    key: 3, alt_icon: 'Twitter Icon', value: 'Nabeel403', link: 'https://twitter.com/Nabeel403',
-    icon: require('/public/icons/twitter-icon.svg')
-  },
-]
-
-const renderContactItem = (contact: contactItem, index: number) => {
-  return <div className={styles.contactItem} key={index}>
-    <Link href={contact.link || '#'}>
-      <div>
-        <Image
-          src={contact.icon}
-          alt={contact.alt_icon}
-          width={30}
-          height={30}
-        />
-        <p>{contact.value}</p>
-      </div>
-    </Link>
-  </div>
-}
-
 export default function About() {
   return (
     <div>
@@ -57,11 +18,7 @@ export default function About() {
         <section className="intro-section">
           {/* <p>My name is Nabeel kahlil Maulana</p> */}
         </section>
-
-        <div className={styles.contactContainer}>
-          {contact_list.map((contact, index) => renderContactItem(contact, index))}
-        </div>
-
+      
         <section className={styles.sectionItem}>
           {/* list job experience here */}
           <div className={styles.sectionSide}>

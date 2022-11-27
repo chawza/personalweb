@@ -1,11 +1,51 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head'
 import Link from 'next/link';
+import Image from 'next/image';
 import { getRecentPost } from './api/post';
 import Navbar from './component/Navbar';
 import PostList from './component/PostList';
 import { Post } from '../types/post';
 import styles from '../styles/home.module.css';
+
+type contactItem = {
+  key: number,
+  icon: string,
+  alt_icon: string,
+  value: string,
+  link: string | undefined
+}
+
+const contact_list: contactItem[] = [
+  {
+    key: 1, alt_icon: 'email icon', value: 'nabeelkahlil403@gmail.com', link: '/',
+    icon: require('/public/icons/email-icon.svg')
+  },
+  {
+    key: 2, alt_icon: 'linkdn icon', value: 'nabeel403', link: 'https://www.linkedin.com/in/nabeel403/',
+    icon: require('/public/icons/linkdin-icon.svg')
+  },
+  {
+    key: 3, alt_icon: 'Twitter Icon', value: 'Nabeel403', link: 'https://twitter.com/Nabeel403',
+    icon: require('/public/icons/twitter-icon.svg')
+  },
+]
+
+const renderContactItem = (contact: contactItem, index: number) => {
+  return <div className={styles.contactItem} key={index}>
+    <Link href={contact.link || '#'}>
+      <div>
+        <Image
+          src={contact.icon}
+          alt={contact.alt_icon}
+          width={30}
+          height={30}
+        />
+        <p>{contact.value}</p>
+      </div>
+    </Link>
+  </div>
+}
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getRecentPost(false, 3);
@@ -30,6 +70,12 @@ export default function Home(props: HomeProps) {
 
     <Navbar/>
 
+    <section>
+      <div className={styles.contactContainer}>
+        {contact_list.map((contact, index) => renderContactItem(contact, index))}
+      </div>
+    </section>
+
     <main>
       <section className={styles.introSection}>
         <h1>
@@ -44,10 +90,11 @@ export default function Home(props: HomeProps) {
           if you want to hire me, you can download my {<Link href=''>resume</Link>} or find more about me {<Link href='/about'>Here</Link>}.
         </p>
       </section>
-      <section className={styles.postSection}>
-        <h2>latest post</h2>
-        <PostList posts={posts}/>
-      </section>
     </main>
+
+    <section className={styles.postSection}>
+      <h2>latest post</h2>
+      <PostList posts={posts}/>
+    </section>
   </div>
 };
