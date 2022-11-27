@@ -9,31 +9,35 @@ import { Post } from '../types/post';
 import styles from '../styles/home.module.css';
 
 type contactItem = {
-  key: number,
   icon: string,
   alt_icon: string,
   value: string,
-  link: string | undefined
+  link: string | undefined,
+  target: string
 }
 
 const contact_list: contactItem[] = [
   {
-    key: 1, alt_icon: 'email icon', value: 'nabeelkahlil403@gmail.com', link: '/',
-    icon: require('/public/icons/email-icon.svg')
+    alt_icon: 'email icon', value: 'nabeelkahlil403@gmail.com', link: '/',
+    icon: require('/public/icons/email-icon.svg'), target:''
   },
   {
-    key: 2, alt_icon: 'linkdn icon', value: 'nabeel403', link: 'https://www.linkedin.com/in/nabeel403/',
-    icon: require('/public/icons/linkdin-icon.svg')
+    alt_icon: 'linkdn icon', value: 'nabeel403', link: 'https://www.linkedin.com/in/nabeel403/',
+    icon: require('/public/icons/linkdin-icon.svg'), target:'_blank'
   },
   {
-    key: 3, alt_icon: 'Twitter Icon', value: 'Nabeel403', link: 'https://twitter.com/Nabeel403',
-    icon: require('/public/icons/twitter-icon.svg')
+    alt_icon: 'Twitter Icon', value: 'Nabeel403', link: 'https://twitter.com/Nabeel403',
+    icon: require('/public/icons/twitter-icon.svg'), target:'_blank'
   },
+  {
+    alt_icon: 'Github icon', value: 'Chawza', link: 'https://github.com/chawza',
+    icon: require('/public/icons/github-icon.svg'), target:'_blank'
+  }
 ]
 
 const renderContactItem = (contact: contactItem, index: number) => {
   return <div className={styles.contactItem} key={index}>
-    <Link href={contact.link || '#'}>
+    <Link href={contact.link || '#'} target='_blank'>
       <div>
         <Image
           src={contact.icon}

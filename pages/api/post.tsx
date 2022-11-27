@@ -79,6 +79,5 @@ export async function getPostDetail(postId: number): Promise<Post> {
     where post.id = ${postId}`;
   const [row, _] = await (await conn).query<PostQuery[]>(query);
   let post = row[0];
-  post.tag = post.tag ? JSON.parse(post.tag.toString()) : null;
   return JSON.parse(JSON.stringify(post)) // Serialize Date
 }
