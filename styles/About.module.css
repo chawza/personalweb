@@ -1,3 +1,7 @@
+.container {
+  width: 40rem;
+}
+
 /* section */
 .sectionItem {
   display: flex;

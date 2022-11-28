@@ -9,10 +9,16 @@ body {
   margin-bottom: 6rem;
 }
 
-main {
+.pageContainer {
+  max-width: 40rem;
+}
+
+.uploadContainer {
+  display: flex;
+  max-width: 60rem;
+  flex-wrap: wrap-reverse;
   justify-content: center;
-  align-items: center;
-  width: 40rem;
+  gap: 1rem;
 }
 
 a {
