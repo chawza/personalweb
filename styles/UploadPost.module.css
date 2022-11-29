@@ -1,4 +1,61 @@
+.submitArea {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.submitArea button {
+  padding: .5rem;
+  font-size: 1rem;
+}
+
+.tagInputArea {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  min-width: 30rem;
+}
+
+.tagInputArea input {
+  width: 50%;
+}
+
+.tagInputArea input:focus {
+  outline: none;
+}
+
+.tagContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.tagInput {
+  border: hidden;
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+
+.tagItem {
+  padding: .2rem;
+  border-style: solid;
+  border-radius: .6rem;
+  background-color: blue;
+  border-color: transparent;
+  color: white;
+}
+
 .editorArea {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+  gap: 1rem;
+  min-width: 30rem;
+}
+
+.editorArea div {
   order: 1;
   min-width: 25rem;
 }
@@ -10,7 +67,6 @@
   font-style: inherit;
 }
 
-.liveEditor {
-  order: 2;
-  min-width: 25rem;
+.form textarea:focus {
+  outline: none;
 }

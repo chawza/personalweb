@@ -1,13 +1,10 @@
 import { Post } from "../types/post"
 import Link from 'next/link'
+import { capitalFirstLetter } from '../lib/stringlib';
 
 interface postListProps {
   posts: Post[],
 };
-
-function capitalFirstLtter(sentence: string) {
-  return `${sentence[0].toUpperCase()}${sentence.slice(1)}`;
-}
 
 function checkDayDifference(dayA: Date, dayB: Date) {
   const MS_IN_A_DAY = 24 * 60 * 60 * 1000;
@@ -29,7 +26,7 @@ function formatDate(date: Date) {
 function renderPostRow (post: Post) {
   const url = { pathname: '/blog/article/[id]', query: { id: post.id }}
   return <>
-    <h3><Link href={url}>{capitalFirstLtter(post.title)}</Link></h3>
+    <h3><Link href={url}>{capitalFirstLetter(post.title)}</Link></h3>
     <p>{formatDate(post.add_date)}</p>
     {
       !!post.tag && post.tag.map((tagname, index) => <span key={`tagname-${index}`}>{tagname}</span>)
