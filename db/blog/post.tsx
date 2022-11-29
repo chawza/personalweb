@@ -15,21 +15,6 @@ interface PostIdsQuerry extends RowDataPacket {
   row: number[]
 }
 
-async function fetchHandler(url: URL, method = 'GET'){
-  const res = await fetch(
-    url.toString(),
-    {
-      method,
-    }
-  )
-  if (res.status >= 300) {
-    const message = `${res.status}:${res.statusText} from ${res.url}`;
-    console.error(message);
-    throw message;
-  }
-  return res;
-};
-
 export async function getRecentPost(content = true, limit?: number) {
   const qContent = content ? ', post.content' : '';
   const qLimit = limit ? `LIMIT ${limit}` : ''

@@ -1,11 +1,10 @@
 import styles from '../../../styles/UploadPost.module.css';
 import Showdown from "showdown";
 import parser from 'html-react-parser';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChangeEvent } from "react";
 import PageLayout from '../../../layout/PageLayout';
 import { capitalFirstLetter } from '../../../lib/stringlib';
-import { addNewPost } from '../../../db/blog/post';
 import Router from 'next/router';
 
 const cvt = new Showdown.Converter({
@@ -50,15 +49,44 @@ export default function UploadPage () {
 
   function getPostTitle(mdFile: string) {
     const lines = mdFile.split('\n');
-    const lineIdx = lines.find(line => findHeadingPattern.test(line));
-    return lines[0].slice(1);
+    const heading = lines.find(line => findHeadingPattern.test(line));
+    if (heading) {
+      return heading.slice(1).trim()
+    }
+    return lines[0].trim()
   }
-
-
-  async function handleAddNewPost() {
+  
+  function handleAddNewPost (event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    if (!textState) {
+      alert("No content found!");
+      return;
+    }
     const title = getPostTitle(textState);
-    const newPostId = await addNewPost(title, textState, tagState)
-    Router.push(`/blog/article/${newPostId}`)
+    const body = {
+      title,
+      content: textState,
+      tag: tagState
+    }
+
+    fetch('/api/blog/post', {
+      body: JSON.stringify(body),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      throw res;
+    })
+    .then(body => {
+      const { message : _, postId } = body;
+      Router.push(`/blog/article/${postId}`);
+    })
+    .catch(error => console.error(error))
   }
 
   function handleTagChange() {

@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       value.tag
     )
 
-    res.status(300).send({
+    res.status(200).send({
       message: `New article has been added with id: ${newPostId}`,
       postId: newPostId
     })
