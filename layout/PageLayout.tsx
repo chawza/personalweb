@@ -1,6 +1,6 @@
-import Navbar from "../component/Navbar"
-import type { AppProps } from 'next/app'
 import React from 'react';
+import Navbar from "../component/Navbar"
+import Footer from '../component/Footer';
 
 interface PageProps {
   children: React.ReactNode
@@ -13,5 +13,6 @@ export default function PageLayout(props: PageProps) {
     <main>
       {children}
     </main>
+    <Footer/>
   </>
 }
