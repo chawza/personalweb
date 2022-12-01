@@ -1,3 +1,15 @@
+.container {
+  max-width: 60rem;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  min-height: 80vh;
+}
+
+.writeArea {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
 .submitArea {
   display: flex;
   justify-content: flex-end;
@@ -17,6 +29,10 @@
   min-width: 30rem;
 }
 
+.tagInputArea > div {
+  width: 50%;
+}
+
 .tagInputArea input {
   width: 50%;
 }
@@ -29,7 +45,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  gap: 1rem;
+  gap: .6rem;
 }
 
 .tagInput {
@@ -53,6 +69,7 @@
   flex-wrap: wrap-reverse;
   gap: 1rem;
   min-width: 30rem;
+  min-height: 50vh;
 }
 
 .editorArea div {
@@ -62,9 +79,9 @@
 
 .form textarea {
   width: 100%;
-  min-height: 6rem;
   font-size: 1rem;
   font-style: inherit;
+  height: 100%;
 }
 
 .form textarea:focus {

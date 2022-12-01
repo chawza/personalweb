@@ -1,9 +1,11 @@
 .footer {
+  width: 40rem;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   padding-top: 2rem;
   padding-bottom: 4rem;
+  margin: auto;
 }
 
 .footer div {

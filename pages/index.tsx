@@ -7,6 +7,7 @@ import PostList from '../component/PostList';
 import { Post } from '../types/post';
 import styles from '../styles/home.module.css';
 import PageLayout from '../layout/PageLayout';
+import { getUserIdByUsername } from '../db/blog/user';
 
 type contactItem = {
   icon: string,
@@ -52,7 +53,8 @@ const renderContactItem = (contact: contactItem, index: number) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await getRecentPost(false, 3);
+  const userId = await getUserIdByUsername(process.env.BLOG_OWNER_USERNAME);
+  const posts = await getRecentPost(userId, false, 3);
   return {
     props: {
       posts
@@ -67,12 +69,7 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
   const { posts } = props;
   return <PageLayout>  
-    <div className='pageContainer'>
-      <Head>
-        <title>Nabeel</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <div className='normalContainer'>   
       <section>
         <div className={styles.contactContainer}>
           {contact_list.map((contact, index) => renderContactItem(contact, index))}

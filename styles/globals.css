@@ -8,13 +8,9 @@ body {
   flex-direction: column;
 }
 
-.pageContainer {
-  max-width: 40rem;
-}
-
-.uploadContainer {  
-  max-width: 60rem;
-  margin-top: 3rem;
+.normalContainer {
+  width: 40rem;
+  min-height: 80vh;
 }
 
 a {

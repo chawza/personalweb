@@ -104,39 +104,35 @@ export default function UploadPage () {
   }, [tagInputState])
 
   return <PageLayout>
-      <div className='uploadContainer'>
-        <form id="upload-form">
-          <div className={styles.writeArea}>
+      <div className={styles.container}>
+        <form className={styles.writeArea}>
+          <div className={styles.tagInputArea}>
+            <input
+              className={styles.tagInput}
+              type='text'
+              form='upload-form'
+              onChange={handleTagInputChange}
+              placeholder='Tag: programming, table, etc'
+            />
+            {renderTagPreview()}
+          </div>
 
-            <div className={styles.tagInputArea}>
-              <input
-                className={styles.tagInput}
-                type='text'
-                form='upload-form'
-                onChange={handleTagInputChange}
-                placeholder='Tag: programming, table, etc'
+          <div className={styles.editorArea}>
+            <div className={styles.form}>
+              <textarea
+                id="live-editor"
+                value={textState}
+                onChange={handleTextChange}
+                form="upload-form"
               />
-              {renderTagPreview()}
             </div>
-
-            <div className={styles.editorArea}>
-              <div className={styles.form}>
-                <textarea
-                  id="live-editor"
-                  value={textState}
-                  onChange={handleTextChange}
-                  form="upload-form"
-                />
-              </div>
-              <div>
-                {renderLivePreview()}
-              </div>
+            <div>
+              {renderLivePreview()}
             </div>
+          </div>
 
-            <div className={styles.submitArea}>
-              <button onClick={handleAddNewPost}>Add New Post</button>
-            </div>
-
+          <div className={styles.submitArea}>
+            <button onClick={handleAddNewPost}>Add New Post</button>
           </div>
         </form>
       </div>
