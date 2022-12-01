@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { login } from "../../../lib/auth";
+import { createToken } from "../../../lib/auth";
 import { NoUserFoundError } from "../../../db/auth/user";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'POST') {
     try {
       const { username, password } = req.body;
-      const token = await login(username, password);
+      const token = await createToken(username, password);
       res.status(200).send({ message: 'login success', jwtToken: token });
     }
     catch (error) {

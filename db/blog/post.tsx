@@ -1,21 +1,13 @@
 import { Post } from "../../types/post";
-import mysql from 'mysql2/promise';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
-
-const conn = mysql.createConnection({
-  host      : process.env['DB_CONN_HOSTNAME'],
-  user      : process.env['DB_USERNAME'],
-  password  : process.env['DB_PASSWORD'],
-  database  : process.env['DB_NAME'],
-  port      : parseInt(process.env['DB_CONN_PORT']!)
-})
+import { conn } from '../db';
 
 interface PostQuery extends RowDataPacket, Post {};
 interface PostIdsQuerry extends RowDataPacket {
   row: number[]
 }
 
-export async function getRecentPost(content = true, limit?: number) {
+export async function getRecentPost(user_id: number, content = true, limit?: number) {
   const qContent = content ? ', post.content' : '';
   const qLimit = limit ? `LIMIT ${limit}` : ''
 
@@ -25,7 +17,7 @@ export async function getRecentPost(content = true, limit?: number) {
       post.last_edit, post.tag, user.username as author
     FROM post
     INNER JOIN user on post.author_id = user.id
-    WHERE post.author_id = (SELECT id FROM user WHERE user.username = '${process.env['BLOG_OWNER_USERNAME']}')
+    WHERE post.author_id = '${user_id}'
     ORDER BY add_date DESC
     ${qLimit};
   `;
@@ -40,12 +32,12 @@ export async function getRecentPost(content = true, limit?: number) {
 })
 };
 
-export async function getAllPostIds(): Promise<number[]> {
+export async function getAllPostIdByUsername(user_id: number, ): Promise<number[]> {
   const query = `
     SELECT post.id
     from post
     WHERE post.author_id = (
-      SELECT id FROM user WHERE user.username = '${process.env['BLOG_OWNER_USERNAME']}'
+      SELECT id FROM user WHERE user.username = '${user_id}'
     );
   `
   const [row, _] = await (await conn).query<PostIdsQuerry[]>(query);
@@ -68,7 +60,7 @@ export async function getPostDetail(postId: number): Promise<Post> {
 }
 
 export async function addNewPost(
-  title: string, content: string, tag: string[] | null
+  user_id: number, title: string, content: string, tag: string[] | null
 ): Promise<number> {
   const qTag = tag ? JSON.stringify(tag): null;
   const query = `
@@ -76,7 +68,7 @@ export async function addNewPost(
       '${title}',
       '${content}',
       '${qTag}',
-      (SELECT id FROM user WHERE username='${process.env['BLOG_OWNER_USERNAME']}')
+      (SELECT id FROM user WHERE username='${user_id}')
     );
   `
   const [result, _] = await (await conn).execute<ResultSetHeader>(query)

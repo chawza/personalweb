@@ -1,17 +1,18 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import { getAllPostIds, getPostDetail } from "../../../db/blog/post";
+import { getAllPostIdByUsername, getPostDetail } from "../../../db/blog/post";
 import { Post } from "../../../types/post";
-import Navbar from "../../../component/Navbar";
 import parse from 'html-react-parser';
 import PageLayout from "../../../layout/PageLayout";
+import { getUserIdByUsername } from "../../../db/blog/user";
 
 import { Converter } from 'showdown';
 
 const cvtr = new Converter()
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const postIds = await getAllPostIds();
+  const userId = await getUserIdByUsername(process.env.BLOG_OWNER_USERNAME)
+  const postIds = await getAllPostIdByUsername(userId);
   const pathList = postIds.map(postId => ({ params: { id: postId.toString() } }));
   return {
     paths: pathList,

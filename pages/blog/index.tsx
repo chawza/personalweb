@@ -3,13 +3,15 @@ import { Post } from '../../types/post'
 import { NextPage, GetStaticProps } from 'next';
 import PostList from '../../component/PostList';
 import PageLayout from '../../layout/PageLayout';
+import { getUserIdByUsername } from "../../db/blog/user";
 
 interface blogPageProps {
   posts: Post[]
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await getRecentPost(false);
+  const userId = await getUserIdByUsername(process.env.BLOG_OWNER_USERNAME)
+  const posts = await getRecentPost(userId, false);
   return { props: { posts } };
 }
 
