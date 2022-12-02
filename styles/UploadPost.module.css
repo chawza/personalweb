@@ -68,22 +68,59 @@
   flex-direction: row;
   flex-wrap: wrap-reverse;
   gap: 1rem;
-  min-width: 30rem;
+  width: 100%;
+  min-width: 40rem;
   min-height: 50vh;
 }
 
 .editorArea div {
   order: 1;
-  min-width: 25rem;
 }
 
-.form textarea {
+.textEditor {
+  width: 100%;
+}
+
+.textEditor textarea {
   width: 100%;
   font-size: 1rem;
   font-style: inherit;
   height: 100%;
 }
 
-.form textarea:focus {
+.textEditor textarea:focus {
   outline: none;
+}
+
+.liveRenderArea {
+  width: 100%;
+}
+
+.liveRenderArea img {
+  max-width: 50vw;
+  height: auto;
+}
+
+.liveRenderArea p {
+  overflow-wrap: break-word;
+}
+
+.fileListContiner {
+  font-size: .8rem;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  gap: .6rem;
+}
+
+.fileListContiner > div {
+  display: flex;
+  gap: .5rem;
+  flex-direction: row;
+  align-items: center;
+}
+
+.fileListContiner > div > img{
+  height: 26px;
+  width: auto;
 }
