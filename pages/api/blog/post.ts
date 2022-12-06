@@ -1,8 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { UploadPostSchema } from "../../../schema/blog/schema/blog/post"
+import { UploadPostSchema, UploadPostType } from "../../../schema/blog/schema/blog/post"
 import { addNewPost } from "../../../db/blog/post";
 import { verifyToken } from "../../../lib/auth";
 import { JsonWebTokenError } from 'jsonwebtoken'
+import { ValidationResult } from "joi";
+
+interface ValidatePostParams extends ValidationResult {
+  value: UploadPostType
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -14,21 +19,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
     if (req.method == 'POST') {
       const { id: userId } = jwtPayload;
-      const { error, value } = UploadPostSchema.validate(req.body)
+      const { error, value: body } = UploadPostSchema.validate(req.body)
 
       if (error) {
         res.status(400).send(error.details)
         throw error;
       }
-
-      console.log(jwtPayload)
+      
+      const { title, content, tag } = body;
 
       const newPostId = await addNewPost(
         userId,
-        value.title,
-        value.content,
-        value.tag
+        title,
+        content,
+        tag,
       )
+
+      console.dir(newPostId)
 
       res.status(200).send({
         message: `New article has been added with id: ${newPostId}`,
@@ -43,6 +50,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (error instanceof JsonWebTokenError) {
       return res.status(401).send({ message: 'Invalid Authorization Token' });
     }
-    throw error
+    else if (error instanceof Error) {
+      res.status(500).send({
+        message: error.message,
+        name: error.name
+      })
+    }
   }
 }

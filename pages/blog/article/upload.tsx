@@ -6,6 +6,8 @@ import { ChangeEvent } from "react";
 import PageLayout from '../../../layout/PageLayout';
 import { capitalFirstLetter } from '../../../lib/stringlib';
 import Router from 'next/router';
+import { REGEX_PATTERN } from '../../../lib/md';
+import { cookHeader, POST_IMAGE_PATHNAME, PUBLIC_IMAGE_PATHNAME } from '../../../lib/client';
 
 const cvt = new Showdown.Converter({
   smoothLivePreview: true
@@ -14,17 +16,29 @@ const cvt = new Showdown.Converter({
 class UploadFile {
   imgUrl: string;
   name: string;
-  file: File
+  file: File;
 
   constructor(file: File) {
     this.file = file;
     this.imgUrl = URL.createObjectURL(file)
     this.name = file.name
   }
+  
+  public async file2Base64(): Promise<string>{
+    let fileReader = new FileReader();
+    const fileDone = new Promise<string>((resolve) => {
+      fileReader.onloadend = () => {
+        if (!fileReader.result)
+          throw Error('Cannot convert img to base64');
+        resolve(fileReader.result.toString());        
+      }
+    })
+    fileReader.readAsDataURL(this.file);
+    return await fileDone;
+  }
 }
 
-const IMG_PATTERN = /!\[(.*)\]\((.*)\)/g;
-const LINK_PATTERN = /(?<=]\().*(?=\))/
+const { IMG_PATTERN, LINK_PATTERN } = REGEX_PATTERN;
 
 export default function UploadPage () {
   const [ textState, setTextState] = useState('');
@@ -40,23 +54,34 @@ export default function UploadPage () {
     setTagInputState(element.target.value);
   }
 
-  function replaceImagePathForPreview(): string{
-    let newText = `${textState}`;
-    const imgMatches = textState.matchAll(IMG_PATTERN);
+  type ImageRenameObj = {
+    filename: string;
+    newFilename: string
+  }
+
+  function replaceImagePathForPreview(newText: string): string{
+    const imgMatches = newText.matchAll(IMG_PATTERN);
   
     for (let match of imgMatches) {
       const imgPattern = match[0];
-      let imgurl = imgPattern.match(LINK_PATTERN);
-      const newimgurl = uploadFiles.find((uploadFile) => uploadFile.name == imgurl ? true : false)?.imgUrl
-      if (!newimgurl) continue;
-      const newImagePattern = imgPattern.replace(imgurl, newimgurl);
+      let matchedLink = imgPattern.match(LINK_PATTERN);
+      if (!matchedLink?.length)
+        continue;
+      let clientImgname = matchedLink[0];
+      const newimgurl = uploadFiles.find((uploadFile) => uploadFile.name == clientImgname ? true : false)?.imgUrl;
+      let newImagePattern;
+      if (newimgurl) {
+        newImagePattern = imgPattern.replace(clientImgname, newimgurl);
+      } else {
+        newImagePattern = imgPattern.replace(clientImgname, '')
+      }
       newText = newText.replace(imgPattern, newImagePattern)
     }
     return newText;
   }
 
   function renderLivePreview() {
-    const mdText = replaceImagePathForPreview()
+    const mdText = replaceImagePathForPreview(textState)
     const htmlPreview = cvt.makeHtml(mdText);
     return parser(htmlPreview);
   }
@@ -87,39 +112,84 @@ export default function UploadPage () {
     }
     return lines[0].trim()
   }
-  
-  function handleAddNewPost (event: React.MouseEvent<HTMLButtonElement>) {
+
+  function replaceImgLinkPath(mdText: string, imgs: ImageRenameObj[]): string {
+    let newText = `${mdText}`;
+    for (let imgRename of imgs) {
+      const newImagePath = `${origin}/${PUBLIC_IMAGE_PATHNAME}/${imgRename.newFilename}`;
+      newText.replace(imgRename.filename, newImagePath)
+    }
+    return newText;
+  }
+
+  async function uploadImage(filename: string, file: string): Promise<Response> {
+    return await fetch(`${origin}/${POST_IMAGE_PATHNAME}`, {
+      method: 'POST',
+      headers: cookHeader(),
+      body: JSON.stringify({
+        filename,
+        file
+        })
+      })
+  }
+
+  async function handleAddNewPost (event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
+
     if (!textState) {
       alert("No content found!");
       return;
     }
-    const title = getPostTitle(textState);
-    const body = {
-      title,
-      content: textState,
-      tag: tagState
-    }
 
-    fetch('/api/blog/post', {
-      body: JSON.stringify(body),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    try {
+      let uploadMdfile = `${textState}`;
+      
+      try {
+        if (uploadFiles.length) {
+          const imgs = await Promise.all(
+            uploadFiles.map(async uploadFile => {
+              const res = await uploadImage(uploadFile.name, await uploadFile.file2Base64());
+              const { message, filename } = await res.json();
+              return {
+                message,
+                filename: uploadFile.name,
+                newFilename: filename,
+              }
+            })
+          );
+          uploadMdfile = replaceImgLinkPath(uploadMdfile, imgs);
+        }   
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to upload Images");
       }
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json()
+      
+      const title = getPostTitle(textState);
+      const body = {
+        title,
+        content: uploadMdfile,
+        tag: tagState,
       }
-      throw res;
-    })
-    .then(body => {
-      const { message : _, postId } = body;
-      Router.push(`/blog/article/${postId}`);
-    })
-    .catch(error => console.error(error))
-  }
+
+      const response = await fetch('/api/blog/post', {
+        body: JSON.stringify(body),
+        method: 'POST',
+        headers: cookHeader()
+      });
+      const resBody = await response.json();
+      const { message : _, postId } = resBody;
+      console.dir(resBody)
+      // setInterval(() => Router.push(`/blog/article/${postId}`), 1000)
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error(error)
+        const errmessage = `${error.name}\n${error.message}`;
+        alert(errmessage);
+      }
+      return;
+    }
+  };
 
   function handleTagChange() {
     if (tagInputState) {
@@ -158,11 +228,20 @@ export default function UploadPage () {
 
   function renderFileList() {
     return <div className={styles.fileListContiner}>
-      {uploadFiles.map(((files, index) => <div key={index}>
+      {uploadFiles.map((files, index) => {
+        return <div
+          key={index}
+          onClick={() => removeUploadFileByFilename(files.name)
+        }>
           <img src={files.imgUrl}/>
           <div>{files.name}</div>
-        </div>))}
+        </div>})}
     </div>
+  }
+
+  function removeUploadFileByFilename(filename: string): void {
+    const newUploadFile = uploadFiles.filter((uploadFile => uploadFile.name == filename ? false : true))
+    setUploadFiles(newUploadFile);
   }
 
   useEffect(() => {

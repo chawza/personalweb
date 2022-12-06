@@ -1,6 +1,6 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import { getAllPostIdByUsername, getPostDetail } from "../../../db/blog/post";
+import { getAllPostIdByUserId, getPostDetail } from "../../../db/blog/post";
 import { Post } from "../../../types/post";
 import parse from 'html-react-parser';
 import PageLayout from "../../../layout/PageLayout";
@@ -12,7 +12,7 @@ const cvtr = new Converter()
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const userId = await getUserIdByUsername(process.env.BLOG_OWNER_USERNAME)
-  const postIds = await getAllPostIdByUsername(userId);
+  const postIds = await getAllPostIdByUserId(userId);
   const pathList = postIds.map(postId => ({ params: { id: postId.toString() } }));
   return {
     paths: pathList,
@@ -20,27 +20,33 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 }
 
-type staticProps = {
+type PageParams = {
   post: Post
 }
 
 interface staticPropsParams extends ParsedUrlQuery{
-  id: string
+    id: string
 };
 
-export const getStaticProps: GetStaticProps<staticProps, staticPropsParams> = async (context) => {
+export const getStaticProps: GetStaticProps<PageParams, staticPropsParams> = async (context) => {
   const { id : postId} = context.params!
   const post = await getPostDetail(parseInt(postId));
   return {
     props: {
-      post
+      post,
+      slug: postId
     }
   }
 }
 
-const ArticlePage: NextPage<staticProps> = (props: staticProps) => {
-  const { post } = props;
+const ArticlePage: NextPage<PageParams> = (props: PageParams) => {
+  const { post, slug } = props;
+  if (!post) {
+    console.log(`slug: ${slug}`)
+    return <div>No post with id {slug} aa</div>
+  };
   const HTMLString = cvtr.makeHtml(post.content);
+  
   return <PageLayout>
     <h1>{post.title}</h1>
     <p>{post.add_date.toString()}</p>

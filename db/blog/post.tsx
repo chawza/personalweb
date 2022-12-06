@@ -32,13 +32,11 @@ export async function getRecentPost(user_id: number, content = true, limit?: num
 })
 };
 
-export async function getAllPostIdByUsername(user_id: number, ): Promise<number[]> {
+export async function getAllPostIdByUserId(user_id: number, ): Promise<number[]> {
   const query = `
     SELECT post.id
     from post
-    WHERE post.author_id = (
-      SELECT id FROM user WHERE user.username = '${user_id}'
-    );
+    WHERE post.author_id = '${user_id}';
   `
   const [row, _] = await (await conn).query<PostIdsQuerry[]>(query);
 
@@ -48,19 +46,20 @@ export async function getAllPostIdByUsername(user_id: number, ): Promise<number[
 
 export async function getPostDetail(postId: number): Promise<Post> {
   const query = `
-    select
+    SELECT
       post.id, post.title, post.content, post.add_date,
       post.last_edit, post.tag, user.username as author
-    from post
-    inner join user on post.author_id = user.id
-    where post.id = ${postId}`;
+    FROM post
+    INNER JOIN user ON post.author_id = user.id
+    WHERE post.id = ${postId};
+  `
   const [row, _] = await (await conn).query<PostQuery[]>(query);
   let post = row[0];
   return JSON.parse(JSON.stringify(post)) // Serialize Date
 }
 
 export async function addNewPost(
-  user_id: number, title: string, content: string, tag: string[] | null
+  author_id: number, title: string, content: string, tag: string[] | null
 ): Promise<number> {
   const qTag = tag ? JSON.stringify(tag): null;
   const query = `
@@ -68,7 +67,7 @@ export async function addNewPost(
       '${title}',
       '${content}',
       '${qTag}',
-      (SELECT id FROM user WHERE username='${user_id}')
+      '${author_id}'
     );
   `
   const [result, _] = await (await conn).execute<ResultSetHeader>(query)
