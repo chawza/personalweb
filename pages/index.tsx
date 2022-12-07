@@ -69,7 +69,7 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
   const { posts } = props;
   return <PageLayout>  
-    <div className='normalContainer'>   
+    <div>   
       <section>
         <div className={styles.contactContainer}>
           {contact_list.map((contact, index) => renderContactItem(contact, index))}

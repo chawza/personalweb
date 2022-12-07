@@ -11,7 +11,7 @@ export default function PageLayout(props: PageProps) {
   const { children } = props;
   return <>
     <Navbar/>
-    <main>
+    <main className='normalContainer'>
       <Head>
         <title>Nabeel</title>
         <link rel="icon" href="/favicon.ico" />

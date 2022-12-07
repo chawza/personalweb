@@ -8,6 +8,7 @@ import { capitalFirstLetter } from '../../../lib/stringlib';
 import Router from 'next/router';
 import { REGEX_PATTERN } from '../../../lib/md';
 import { cookHeader, POST_IMAGE_PATHNAME, PUBLIC_IMAGE_PATHNAME } from '../../../lib/client';
+import { IMAGE_DIR_PATH } from '../../../db/blog/image';
 
 const cvt = new Showdown.Converter({
   smoothLivePreview: true
@@ -113,15 +114,6 @@ export default function UploadPage () {
     return lines[0].trim()
   }
 
-  function replaceImgLinkPath(mdText: string, imgs: ImageRenameObj[]): string {
-    let newText = `${mdText}`;
-    for (let imgRename of imgs) {
-      const newImagePath = `${origin}/${PUBLIC_IMAGE_PATHNAME}/${imgRename.newFilename}`;
-      newText.replace(imgRename.filename, newImagePath)
-    }
-    return newText;
-  }
-
   async function uploadImage(filename: string, file: string): Promise<Response> {
     return await fetch(`${origin}/${POST_IMAGE_PATHNAME}`, {
       method: 'POST',
@@ -130,7 +122,7 @@ export default function UploadPage () {
         filename,
         file
         })
-      })
+    })
   }
 
   async function handleAddNewPost (event: React.MouseEvent<HTMLButtonElement>) {
@@ -157,7 +149,17 @@ export default function UploadPage () {
               }
             })
           );
-          uploadMdfile = replaceImgLinkPath(uploadMdfile, imgs);
+          
+          const matchedImage = uploadMdfile.matchAll(IMG_PATTERN);
+          for(let match of matchedImage) {
+            const imagePattern = match[0];
+            const filename = imagePattern.match(LINK_PATTERN);
+            if (!filename) continue;
+            const newImg = imgs.find(img => img.filename == filename[0])
+            if (!newImg) continue;
+            const newImagePattern = imagePattern.replace(filename[0], newImg.newFilename);
+            uploadMdfile = uploadMdfile.replace(imagePattern, newImagePattern);
+          }
         }   
       } catch (error) {
         console.error(error);

@@ -3,11 +3,6 @@ import { UploadPostSchema, UploadPostType } from "../../../schema/blog/schema/bl
 import { addNewPost } from "../../../db/blog/post";
 import { verifyToken } from "../../../lib/auth";
 import { JsonWebTokenError } from 'jsonwebtoken'
-import { ValidationResult } from "joi";
-
-interface ValidatePostParams extends ValidationResult {
-  value: UploadPostType
-}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

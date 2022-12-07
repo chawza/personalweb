@@ -10,11 +10,11 @@ function saveImageToDb(imageBase64: string, filename: string) : newFilename {
   const newFileName = `${nanoid()}_${filename}`;
   const fileSavePath = `${ABSOLUTE_IMG_DIR_PATH}/${newFileName}`;
   const decodedImage = Buffer.from(imageBase64, 'base64');
-  fs.writeFileSync(fileSavePath, decodedImage, { encoding: 'binary'})
+  fs.writeFileSync(fileSavePath, decodedImage);
   return newFileName
 }
 
 export {
   saveImageToDb,
-  IMAGE_DIR_PATH
+  IMAGE_DIR_PATH,
 }

@@ -14,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
     if (req.method == 'POST') {
       const { filename, file } = req.body;
-      const newFilename = saveImageToDb(file, filename);   
+      const blobString = file.split(',')[1];
+      const newFilename = saveImageToDb(blobString, filename);   
       res.status(200).send({
         message: `New image has been added with name: ${newFilename}`,
         filename: newFilename
