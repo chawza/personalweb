@@ -4,8 +4,10 @@ import { capitalFirstLetter } from '../lib/stringlib';
 import Router from 'next/router';
 import Image from "next/image";
 import styles from '../styles/PostList.module.css';
-import { checkUserIsLoggedIn, cookHeader } from "../lib/client";
-import { useEffect, useState } from "react";
+import { cookHeader } from "../lib/client";
+import { useContext } from "react";
+import BlogContext from "../context/BlogContext";
+
 interface postListProps {
   posts: Post[],
 };
@@ -52,7 +54,7 @@ async function handleDeleteRow(postId: string) {
   }
 }
 
-function renderPostRow (post: Post, index: number, isLoggedId: boolean = false) {
+function renderPostRow (post: Post, index: number, isLoggedIn: boolean = false) {
   const url = { pathname: '/blog/article/[id]', query: { id: post.id }}
   return <div className={styles.articleRow} key={index}>
     <div className={styles.articleRowContent}>
@@ -63,13 +65,13 @@ function renderPostRow (post: Post, index: number, isLoggedId: boolean = false) 
       }
     </div>
     <div className={styles.articleRowSide}>
-      { isLoggedId &&
-        <div onClick={() => handleDeleteRow(post.id)}>
+      { isLoggedIn &&
+        <div className={styles.trashIcon} onClick={() => handleDeleteRow(post.id)}>
           <Image
             src={require('/public/icons/trash-icon.svg')}
             alt="trash icon"
-            width={20}
-            height={20}
+            width={22}
+            height={24}
           />   
         </div>
       } 
@@ -78,16 +80,7 @@ function renderPostRow (post: Post, index: number, isLoggedId: boolean = false) 
 }
 
 export default function PostList(props: postListProps) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  function checkLogin() {
-    if (checkUserIsLoggedIn()) setIsLoggedIn(true);
-  };
-
-  useEffect(() => {
-    checkLogin()
-  }, [])
-
+  const { isLoggedIn } = useContext(BlogContext);
   const { posts } = props;
   return <div>
     {posts && posts.map((post, index) => renderPostRow(post, index, isLoggedIn))}

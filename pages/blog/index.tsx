@@ -2,8 +2,8 @@ import { getRecentPost } from "../../db/blog/post"
 import { Post } from '../../types/post'
 import { NextPage, GetStaticProps } from 'next';
 import PostList from '../../component/PostList';
-import PageLayout from '../../layout/PageLayout';
 import { getUserIdByUsername } from "../../db/blog/user";
+import BlogLayout from "../../layout/BlogLayout";
 
 interface blogPageProps {
   posts: Post[]
@@ -17,12 +17,12 @@ export const getStaticProps: GetStaticProps = async () => {
 
 const BlogPage: NextPage<blogPageProps> = (props) => {
   const { posts } = props;
-  return <PageLayout>
+  return <BlogLayout>
     <div>
       <h1>Blog Posts</h1>
       <PostList posts={posts}/>      
     </div>
-  </PageLayout>
+  </BlogLayout>
 };
 
 export default BlogPage;

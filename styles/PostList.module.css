@@ -9,6 +9,14 @@
   opacity: 0;
 }
 
+.articleRowSide .trashIcon {
+  margin-top: 1rem; 
+}
+
+.articleRowSide .trashIcon:hover {
+  cursor: pointer 
+}
+
 .articleRow:hover .articleRowSide {
   opacity: 100%;
 }

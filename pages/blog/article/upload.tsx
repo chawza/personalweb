@@ -180,8 +180,7 @@ export default function UploadPage () {
       });
       const resBody = await response.json();
       const { message : _, postId } = resBody;
-      console.dir(resBody)
-      // setInterval(() => Router.push(`/blog/article/${postId}`), 1000)
+      setInterval(() => Router.push(`/blog/article/${postId}`), 1000)
     }
     catch (error) {
       if (error instanceof Error) {

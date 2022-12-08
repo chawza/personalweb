@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from "../component/Navbar"
-import Footer from '../component/Footer';
 import Head from 'next/head';
 
 interface PageProps {
@@ -18,6 +17,5 @@ export default function PageLayout(props: PageProps) {
       </Head>
       {children}
     </main>
-    <Footer/>
   </>
 }

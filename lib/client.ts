@@ -1,3 +1,5 @@
+import { UserState } from "../context/BlogContext";
+
 const POST_IMAGE_PATHNAME = `/api/blog/image`;
 const PUBLIC_IMAGE_PATHNAME = `/public/images`
 
@@ -14,9 +16,22 @@ function checkUserIsLoggedIn(): boolean {
   if (localStorage.getItem('jwt')) return true;
   else return false;
 }
+
+function getUserDataFromJwt(jwToken: string): UserState {
+  if (!jwToken) return null;
+  const payloadString = jwToken.split('.')[1];
+  const decodedPayload = atob(payloadString);
+  const payload = JSON.parse(decodedPayload);
+  return {
+    username: payload.username as string,
+    id: parseInt(payload.id)
+  }
+}
+
 export {
   POST_IMAGE_PATHNAME,
   PUBLIC_IMAGE_PATHNAME,
   cookHeader,
-  checkUserIsLoggedIn
+  checkUserIsLoggedIn,
+  getUserDataFromJwt
 }

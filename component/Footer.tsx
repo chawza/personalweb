@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link"
 import styles from '../styles/component/Footer.module.css';
+import BlogContext from "../context/BlogContext";
 
 function renderUploadLink () {
   const token = localStorage.getItem('jwt');
@@ -12,38 +13,14 @@ function renderUploadLink () {
 }
 
 export default function Footer() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isInBlog, setisInBlog] = useState(false)
-
-  function checkJwt() {
-    if (localStorage.getItem('jwt')) {
-      setIsLoggedIn(true);
-    }else{
-      setIsLoggedIn(false);
-    }
-  }
-
-  function checkPathname() {
-    if (location.pathname.startsWith('/blog'))
-      setisInBlog(true);
-  }
-
-  useEffect(() => {
-    checkJwt();
-    checkPathname();
-  }, [])
-
-  function logout() {
-    localStorage.removeItem('jwt');
-    setIsLoggedIn(false)
-  }
-
+  const { isLoggedIn, func: { logout } } = useContext(BlogContext); 
+  
   return <footer className={styles.footer}>
     <div>
         {isLoggedIn
           ? <Link href='/' onClick={logout}>Logout</Link>
           : <Link href='/auth/login'>Login</Link>}
-        {isInBlog && isLoggedIn
+        {isLoggedIn
           ? renderUploadLink()
           : <></>}
     </div>
