@@ -1,5 +1,5 @@
 import { Post } from "../../types/post";
-import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { RowDataPacket, ResultSetHeader, OkPacket } from 'mysql2';
 import { conn } from '../db';
 
 interface PostQuery extends RowDataPacket, Post {};
@@ -74,3 +74,11 @@ export async function addNewPost(
   const { insertId } = result;
   return insertId;
 }
+
+export async function deletePostById(postId: string) {
+  const query = `
+    DELETE FROM post WHERE post.id = ${postId};
+  `
+  const [okPacket, _] = await (await conn).execute<OkPacket>(query);
+  return okPacket;
+};

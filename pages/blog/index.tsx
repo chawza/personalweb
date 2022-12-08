@@ -20,7 +20,7 @@ const BlogPage: NextPage<blogPageProps> = (props) => {
   return <PageLayout>
     <div>
       <h1>Blog Posts</h1>
-      <PostList posts={posts} />      
+      <PostList posts={posts}/>      
     </div>
   </PageLayout>
 };

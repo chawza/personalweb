@@ -14,7 +14,13 @@ function saveImageToDb(imageBase64: string, filename: string) : newFilename {
   return newFileName
 }
 
+function deleteimageByName(filename: string) {
+  const fileSavePath = `${ABSOLUTE_IMG_DIR_PATH}/${filename}`;
+  fs.unlinkSync(fileSavePath)
+}
+
 export {
   saveImageToDb,
+  deleteimageByName,
   IMAGE_DIR_PATH,
 }

@@ -1,0 +1,20 @@
+.articleRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.articleRowSide {
+  width: fit-content;
+  opacity: 0;
+}
+
+.articleRow:hover .articleRowSide {
+  opacity: 100%;
+}
+
+.articleRowContent {
+  width: 100%;  
+}
+
+

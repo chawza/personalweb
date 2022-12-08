@@ -1,9 +1,23 @@
+
+
 const REGEX_PATTERN = {
   IMG_PATTERN: /!\[(.*)\]\((.*)\)/g,
   LINK_PATTERN: /(?<=]\().*(?=\))/,
   CUSTOM_LINK_PATTERN: (customText: string) => new RegExp(`(?<=]\()${customText}(?=\))`)
 }
 
+function getImgFilenamesFromMD(mdText: string): string[] | [] {
+  const filenames = [];
+  for (let match of mdText.matchAll(REGEX_PATTERN.IMG_PATTERN)) {
+    const imgMatch = match[0];
+    const filename = imgMatch.match(REGEX_PATTERN.LINK_PATTERN);
+    if (!filename) continue;
+    filenames.push(filename[0]) 
+  }
+  return filenames;
+}
+
 export {
-  REGEX_PATTERN
+  REGEX_PATTERN,
+  getImgFilenamesFromMD
 }
