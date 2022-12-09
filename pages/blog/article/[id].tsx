@@ -7,6 +7,8 @@ import PageLayout from "../../../layout/PageLayout";
 import { getUserIdByUsername } from "../../../db/blog/user";
 import { Converter } from 'showdown';
 import { REGEX_PATTERN } from "../../../lib/md";
+import TagList from "../../../component/TagList";
+import { DateFormat } from "../../../lib/stringlib";
 
 const { IMG_PATTERN, LINK_PATTERN } = REGEX_PATTERN;
 
@@ -69,9 +71,9 @@ const ArticlePage: NextPage<PageParams> = (props: PageParams) => {
   let HTMLString = cvtr.makeHtml(post.content); 
   return <PageLayout>
     <div>
-      <p>{post.add_date.toString()}</p>
+      <p>{DateFormat.CleanReadable(post.add_date)}</p>
       <div className="tag-container">
-        {post.tag && post.tag.map((tagname, index) => <div key={`tag-${index}`}>{tagname}</div>)}
+        {post.tag && <TagList tags={post.tag}/>}
       </div>
       <div className="articleArea">
         {parse(HTMLString)}

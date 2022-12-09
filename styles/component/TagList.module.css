@@ -1,0 +1,12 @@
+.tagListContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.tagListContainer .tagListItem {
+  font-size: .8rem;
+  background-color: lightgrey;
+  padding: 4px;
+  border-radius: 4px;
+}

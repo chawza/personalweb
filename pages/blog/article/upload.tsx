@@ -9,6 +9,7 @@ import Router from 'next/router';
 import { REGEX_PATTERN } from '../../../lib/md';
 import { cookHeader, POST_IMAGE_PATHNAME, PUBLIC_IMAGE_PATHNAME } from '../../../lib/client';
 import { IMAGE_DIR_PATH } from '../../../db/blog/image';
+import TagList from '../../../component/TagList';
 
 const cvt = new Showdown.Converter({
   smoothLivePreview: true
@@ -91,16 +92,7 @@ export default function UploadPage () {
     if (!tagState[0]) {
       return <></>
     }
-    return <div className={styles.tagContainer}>
-      {tagState.map((tag, index) => {
-        return <div
-          key={index}
-          className={styles.tagItem}
-        >
-          {tag ? capitalFirstLetter(tag) : ''}
-        </div>
-      })}
-    </div>
+    return <TagList tags={tagState}/> 
   }
 
   const findHeadingPattern = /#(.*)/
@@ -180,7 +172,7 @@ export default function UploadPage () {
       });
       const resBody = await response.json();
       const { message : _, postId } = resBody;
-      setInterval(() => Router.push(`/blog/article/${postId}`), 1000)
+    setTimeout(() => Router.push(`/blog/article/${postId}`), 1000)
     }
     catch (error) {
       if (error instanceof Error) {

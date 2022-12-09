@@ -1,33 +1,17 @@
 import { Post } from "../types/post"
 import Link from 'next/link'
-import { capitalFirstLetter } from '../lib/stringlib';
+import { capitalFirstLetter, DateFormat } from '../lib/stringlib';
 import Router from 'next/router';
 import Image from "next/image";
 import styles from '../styles/PostList.module.css';
 import { cookHeader } from "../lib/client";
 import { useContext } from "react";
 import BlogContext from "../context/BlogContext";
+import TagList from '../component/TagList'
 
 interface postListProps {
   posts: Post[],
 };
- 
-function checkDayDifference(dayA: Date, dayB: Date) {
-  const MS_IN_A_DAY = 24 * 60 * 60 * 1000;
-  return (dayA.getTime() - dayB.getTime()) / MS_IN_A_DAY;
-}
-
-function formatDate(date: Date) {
-  // NextJs props passing can only JSON serialized, bummer
-  const dateDate = typeof(date) == 'string' ? new Date(date): date;
-  const fullMonth = dateDate.toDateString().split(' ')[1];
-
-  const todayDate = new Date();
-  const dayDifference = checkDayDifference(new Date(), dateDate);
-  if (dayDifference <= 1 && (todayDate.getDay() == dateDate.getDay())) return 'Today';
-  if (dayDifference <= 2) return 'Yesterday';
-  return `${dateDate.getDate()} ${fullMonth} ${dateDate.getFullYear()}`;
-}
 
 async function handleDeleteRow(postId: string) {
   try {
@@ -43,7 +27,7 @@ async function handleDeleteRow(postId: string) {
       alert(message);
     } else {
       alert(message)
-      setInterval(() => Router.reload(), 2000);
+      setTimeout(() => Router.reload(), 2000);
     }
   }
   catch (error) {
@@ -59,9 +43,9 @@ function renderPostRow (post: Post, index: number, isLoggedIn: boolean = false) 
   return <div className={styles.articleRow} key={index}>
     <div className={styles.articleRowContent}>
       <h3><Link href={url}>{capitalFirstLetter(post.title)}</Link></h3>
-      <p>{formatDate(post.add_date)}</p>
+      <p>{DateFormat.CleanReadable(post.add_date)}</p>
       {
-        !!post.tag && post.tag.map((tagname, index) => <span key={`tagname-${index}`}>{tagname}</span>)
+        !!post.tag && <TagList tags={post.tag}/> 
       }
     </div>
     <div className={styles.articleRowSide}>
