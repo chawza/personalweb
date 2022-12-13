@@ -3,10 +3,11 @@
 const REGEX_PATTERN = {
   IMG_PATTERN: /!\[(.*)\]\((.*)\)/g,
   LINK_PATTERN: /(?<=]\().*(?=\))/,
-  CUSTOM_LINK_PATTERN: (customText: string) => new RegExp(`(?<=]\()${customText}(?=\))`)
+  CUSTOM_LINK_PATTERN: (customText: string) => new RegExp(`(?<=]\\()${customText}(?=\\))`),
+  CUSTOM_IMG_PATTERN: (imagePath: string) => new RegExp(`!\\[(.*)\\]\\(${imagePath}\\)`)
 }
 
-function getImgFilenamesFromMD(mdText: string): string[] | [] {
+function getImgFilenamesFromMD(mdText: string): string[] {
   const filenames = [];
   for (let match of mdText.matchAll(REGEX_PATTERN.IMG_PATTERN)) {
     const imgMatch = match[0];

@@ -5,15 +5,15 @@
 }
 
 .articleRowSide {
+  display: flex;
+  flex-direction: row-reverse;
   width: fit-content;
   opacity: 0;
+  padding-top: 1rem;
+  gap: 2px;
 }
 
-.articleRowSide .trashIcon {
-  margin-top: 1rem; 
-}
-
-.articleRowSide .trashIcon:hover {
+.articleRowSide .trashIcon:hover,.editIcon:hover {
   cursor: pointer 
 }
 

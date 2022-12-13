@@ -1,7 +1,8 @@
 import { UserState } from "../context/BlogContext";
 
 const POST_IMAGE_PATHNAME = `/api/blog/image`;
-const PUBLIC_IMAGE_PATHNAME = `/public/images`
+const PUBLIC_IMAGE_PATHNAME = `/public/images`;
+const POST_IMAGES_BUFFER_PATHNAME = '/api/blog/image/sync'
 
 function cookHeader() {
   const headers = new Headers()
@@ -31,6 +32,7 @@ function getUserDataFromJwt(jwToken: string): UserState {
 export {
   POST_IMAGE_PATHNAME,
   PUBLIC_IMAGE_PATHNAME,
+  POST_IMAGES_BUFFER_PATHNAME,
   cookHeader,
   checkUserIsLoggedIn,
   getUserDataFromJwt

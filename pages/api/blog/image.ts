@@ -9,7 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!auth)
       throw new Error('Authorization token not found!');
     
-      console.log(auth)
     verifyToken(auth || '');
   
     if (req.method == 'POST') {

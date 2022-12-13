@@ -41,7 +41,7 @@ export default function PageLayout(props: PageProps) {
   return <>
     <BlogContext.Provider value={contextState}>
       <Navbar/>
-      <main className='normalContainer'>
+      <main >
         <Head>
           <title>Nabeel</title>
           <link rel="icon" href="/favicon.ico" />

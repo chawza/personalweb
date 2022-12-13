@@ -41,3 +41,4 @@ next-env.d.ts
 media/img/*
 key
 public/images/*
+temp/img

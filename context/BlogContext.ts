@@ -3,10 +3,10 @@ import React from "react"
 export type UserState = {
   username: string,
   id: number
-} | null;
+};
 
 export interface BlogContextState {
-  user: UserState,
+  user: UserState | null,
   isLoggedIn: boolean,
   func: {
     logout(): void

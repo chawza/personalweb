@@ -1,5 +1,5 @@
 import { Post } from "../types/post"
-import Link from 'next/link'
+import Link from 'next/link';
 import { capitalFirstLetter, DateFormat } from '../lib/stringlib';
 import Router from 'next/router';
 import Image from "next/image";
@@ -15,13 +15,18 @@ interface postListProps {
 
 async function handleDeleteRow(postId: string) {
   try {
-    const res = await fetch(`/api/blog/post/${postId}`, {
+    const url = new URL(`${origin}/api/blog/post`);
+    url.searchParams.set('id', postId);
+    
+    const res = await fetch(url.toString(), {
       headers: cookHeader(),
       method: 'DELETE',
     });
+
     if (!res.status.toString().startsWith('2')) {
       throw new Error('Unable to delete post')
     }
+
     const { message } = await res.json();
     if (!res.status.toString().startsWith('2')) {
       alert(message);
@@ -38,7 +43,7 @@ async function handleDeleteRow(postId: string) {
   }
 }
 
-function renderPostRow (post: Post, index: number, isLoggedIn: boolean = false) {
+function renderPostRow(post: Post, index: number, isLoggedIn: boolean = false) {
   const url = { pathname: '/blog/article/[id]', query: { id: post.id }}
   return <div className={styles.articleRow} key={index}>
     <div className={styles.articleRowContent}>
@@ -50,15 +55,27 @@ function renderPostRow (post: Post, index: number, isLoggedIn: boolean = false) 
     </div>
     <div className={styles.articleRowSide}>
       { isLoggedIn &&
-        <div className={styles.trashIcon} onClick={() => handleDeleteRow(post.id)}>
-          <Image
-            src={require('/public/icons/trash-icon.svg')}
-            alt="trash icon"
-            width={22}
-            height={24}
-          />   
-        </div>
-      } 
+        <>
+          <div className={styles.trashIcon} onClick={() => handleDeleteRow(post.id)}>
+            <Image
+              src={require('/public/icons/trash-icon.svg')}
+              alt="trash icon"
+              width={22}
+              height={22}
+            />   
+          </div>
+          <div className={styles.editIcon}>
+            <Link href={`/blog/article/editor?id=${post.id}`}>
+              <Image
+                src={require('/public/icons/editpen-icon.svg')}
+                alt="Edit pen icon"
+                width={22}
+                height={22}
+              />  
+            </Link>
+          </div> 
+        </>
+      }   
     </div>
   </div> 
 }

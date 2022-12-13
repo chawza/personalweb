@@ -7,7 +7,7 @@ function renderUploadLink () {
   const token = localStorage.getItem('jwt');
   if (!token) return <></>;
 
-  const url = new URL(`${location.origin}/blog/article/upload`)
+  const url = new URL(`${location.origin}/blog/article/editor`)
   url.searchParams.set('token', token)
   return <Link href={url.toString()} >Upload</Link>
 }

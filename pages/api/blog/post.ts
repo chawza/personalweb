@@ -1,8 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { UploadPostSchema, UploadPostType } from "../../../schema/blog/schema/blog/post"
-import { addNewPost } from "../../../db/blog/post";
+import { UpdatePostSchema, UploadPostSchema } from "../../../schema/blog/post";
+import { addNewPost, deletePostById, getPostDetail, updatePostById } from "../../../db/blog/post";
 import { verifyToken } from "../../../lib/auth";
 import { JsonWebTokenError } from 'jsonwebtoken'
+import { deleteimageByName, moveTempImgToDb } from "../../../db/blog/image";
+import { getImgFilenamesFromMD } from "../../../lib/md";
+
+class UserError extends Error {
+  constructor(...args: any[]) {
+    super(...args);
+    this.name = 'UserError';
+  }
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -21,22 +30,68 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         throw error;
       }
       
-      const { title, content, tag } = body;
+      const { title, content, tag, imgFilenames } = body;
 
       const newPostId = await addNewPost(
         userId,
         title,
         content,
         tag,
-      )
+      );
 
-      console.dir(newPostId)
+      if (imgFilenames) {
+        for(let filename of imgFilenames) {
+          moveTempImgToDb(filename);
+        }
+      }
 
       res.status(200).send({
         message: `New article has been added with id: ${newPostId}`,
         postId: newPostId
       })
+      return;
     }
+    else if (req.method == 'DELETE') {
+      const { id } = req.query;
+      if (!id) {
+        throw new Error('Invlaid URL path / query');
+      }
+      const post = await getPostDetail(parseInt(id.toString()));
+      const filenames = getImgFilenamesFromMD(post.content);
+      try {
+        if (filenames) {
+          filenames.map(filename => deleteimageByName(filename));
+        }
+      } catch(error) {
+        console.error('failed to delete images', error)
+      }
+      const okPacket = await deletePostById(post.id);
+      if (okPacket.affectedRows < 1)
+        throw new Error('Row delete failed. Number row affected' + okPacket.affectedRows);
+      res.status(200).send({
+        message: `Post with with id: ${post.id} has been deleted.`
+      });
+      return;
+    }
+    else if (req.method == 'PATCH') {
+      const { error, value: body } = UpdatePostSchema.validate(req.body)
+      if (error) {
+        res.status(400).send(error.details)
+        throw error;
+      }
+      
+      const { title, content, tag, newFilenames, id } = body;
+      const _ = await updatePostById(parseInt(id.toString()), title, content, tag);
+      if (newFilenames) {
+        for(let filename of newFilenames) {
+          moveTempImgToDb(filename);
+        }
+      } 
+      res.status(200).send({
+        message: `Article updated!`,
+      });
+      return;
+    } 
     else{
       res.status(405).send(`Invalid request method: ${req.method}`)
     }

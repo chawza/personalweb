@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from "../component/Navbar"
 import Head from 'next/head';
+import styles from '../styles/layout/PageLayout.module.css';
 
 interface PageProps {
   children: React.ReactNode

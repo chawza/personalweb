@@ -11,6 +11,7 @@ body {
 .normalContainer {
   width: 40rem;
   min-height: 80vh;
+  margin-bottom: 20vh;
 }
 
 a {

@@ -1,12 +1,5 @@
-import mysql, { RowDataPacket } from 'mysql2/promise';
-
-const conn = mysql.createConnection({
-  host      : process.env['DB_CONN_HOSTNAME'],
-  user      : process.env['DB_USERNAME'],
-  password  : process.env['DB_PASSWORD'],
-  database  : process.env['DB_NAME'],
-  port      : parseInt(process.env['DB_CONN_PORT']!)
-})
+import { RowDataPacket } from 'mysql2/promise';
+import { conn } from '../db';
 
 interface userQuery extends RowDataPacket {
   username: string,
@@ -23,7 +16,7 @@ class NoUserFoundError extends Error {
 export async function verifyUserAuth(username: string, password: string) {
   console.log(`${username}\t${password}`)
   const query = `SELECT id, password FROM user WHERE user.username='${username}' AND user.password='${password}';`
-  const [row, _] = await (await conn).execute<userQuery[]>(query);
+  const [row, _] = await conn.execute<userQuery[]>(query);
   if (row.length == 0) {
     throw new NoUserFoundError();
   }
