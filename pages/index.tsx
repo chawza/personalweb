@@ -8,6 +8,7 @@ import { Post } from '../types/post';
 import styles from '../styles/home.module.css';
 import PageLayout from '../layout/PageLayout';
 import { getUserIdByUsername } from '../db/blog/user';
+import { BLOG_OWNER_NAME } from '../setup';
 
 type contactItem = {
   icon: string,
@@ -53,7 +54,7 @@ const renderContactItem = (contact: contactItem, index: number) => {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const userId = await getUserIdByUsername(process.env.BLOG_OWNER_USERNAME);
+  const userId = await getUserIdByUsername(BLOG_OWNER_NAME);
   const posts = await getRecentPost(userId, false, 3);
   return {
     props: {

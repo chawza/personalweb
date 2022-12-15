@@ -11,6 +11,7 @@ import { GetServerSidePropsContext } from 'next';
 import { getPostDetail } from '../../../db/blog/post';
 import { Post } from '../../../types/post';
 import BlogLayout from '../../../layout/BlogLayout';
+import Image from 'next/image';
 
 const cvt = new Showdown.Converter({
   smoothLivePreview: true
@@ -212,7 +213,7 @@ export default function UploadPage(props: UploadPageProps) {
     const newImgArray = await Promise.all(newImgArrayPromise);
 
     const chunks = new Blob([JSON.stringify(newImgArray)]);
-    const CHUNK_SIZE = 500_000 // 1mb per chunk
+    const CHUNK_SIZE = 500_000 // 0.5mb per chunk
     const totalChunk = Math.ceil(chunks.size / CHUNK_SIZE);
     console.info(`total file size: ${chunks.size}`);
     console.info(`Total chunks size: ${totalChunk}`);
@@ -350,7 +351,7 @@ export default function UploadPage(props: UploadPageProps) {
   }
 
   function removeUploadFileByFilename(filename: string): void {
-    const newUploadFile = uploadFiles.filter((uploadFile => uploadFile.name == filename ? false : true))
+    const newUploadFile = uploadFiles.filter(uploadFile => uploadFile.name == filename ? false : true);
     setUploadFiles(newUploadFile);
   }
 
@@ -397,7 +398,6 @@ export default function UploadPage(props: UploadPageProps) {
   useEffect(() => {
     handleTagChange()
   }, [tagInputState])
-
   return <BlogLayout>
       <div className={styles.container}>
         <form className={styles.writeArea}>

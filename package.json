@@ -1,14 +1,14 @@
 {
   "name": "personalweb",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "set PORT=5000 && set NODE_ENV=development && node server.js",
     "build": "next build",
     "export": "next build && next export",
-    "start": "next start",
-    "lint": "next lint",
-    "serve": "next build && next start"
+    "start": "set PORT=3000 && set NODE_ENV=production && node server.js",
+    "serve": "set PORT=3000 && set NODE_ENV=production && npm run build && node server.js",
+    "lint": "next lint"
   },
   "dependencies": {
     "@next/font": "^13.0.3",

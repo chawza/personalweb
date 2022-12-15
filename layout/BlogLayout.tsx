@@ -12,7 +12,7 @@ interface PageProps {
 export default function PageLayout(props: PageProps) {
   const { children } = props;
   const [ isLoggedIn, setisLoggedIn ] = useState(false);
-  const [ user, setUser ] = useState<UserState>(null);
+  const [ user, setUser ] = useState<UserState | null>(null);
   
   function logout() {
     localStorage.removeItem('jwt');

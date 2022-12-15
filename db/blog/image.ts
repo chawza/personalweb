@@ -1,10 +1,8 @@
 import fs from 'fs';
 import { nanoid } from "nanoid";
 
-const IMAGE_DIR_PATH = '/public/images';
-const TEMP_IMAGE_DIR_PATH = '/temp/img'
-const ABSOLUTE_IMG_DIR_PATH = process.cwd() + IMAGE_DIR_PATH;
-const ABSOULTE_TEMP_IMG_DIR_PATH = process.cwd() + TEMP_IMAGE_DIR_PATH;
+const ABSOLUTE_IMG_DIR_PATH = process.env.PUBLIC_IMG_DIR; 
+const ABSOULTE_TEMP_IMG_DIR_PATH = process.env.TEMP_IMAGE_DIR;
 
 type newFilename = string;
 
@@ -41,5 +39,4 @@ export {
   deleteimageByName,
   saveImgInTempDir,
   moveTempImgToDb,
-  IMAGE_DIR_PATH,
 }

@@ -5,9 +5,9 @@ interface getUserIdType extends RowDataPacket {
   id: number
 }
 
-export async function getUserIdByUsername(user_id: number): Promise<number> {
+export async function getUserIdByUsername(username: string): Promise<number> {
   const [ result , _ ] = await conn.execute<getUserIdType[]>(`
-    SELECT id FROM user WHERE username='${user_id}';
+    SELECT id FROM user WHERE username='${username}';
   `);
   const { id } = result[0];
   return id;

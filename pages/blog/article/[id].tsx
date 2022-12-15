@@ -9,13 +9,17 @@ import { Converter } from 'showdown';
 import { REGEX_PATTERN } from "../../../lib/md";
 import TagList from "../../../component/TagList";
 import { DateFormat } from "../../../lib/stringlib";
+import { BLOG_OWNER_NAME } from "../../../setup";
 
 const { IMG_PATTERN, LINK_PATTERN } = REGEX_PATTERN;
 
 const cvtr = new Converter()
 
+
 export const getStaticPaths: GetStaticPaths = async () => {
-  const userId = await getUserIdByUsername(process.env.BLOG_OWNER_USERNAME)
+  const userId = await getUserIdByUsername(BLOG_OWNER_NAME);
+  if (!userId) throw new Error(`User name with ${BLOG_OWNER_NAME} is not found!`);
+
   const postIds = await getAllPostIdByUserId(userId);
   const pathList = postIds.map(postId => ({ params: { id: postId.toString() } }));
   return {

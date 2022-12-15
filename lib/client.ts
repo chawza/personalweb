@@ -18,7 +18,7 @@ function checkUserIsLoggedIn(): boolean {
   else return false;
 }
 
-function getUserDataFromJwt(jwToken: string): UserState {
+function getUserDataFromJwt(jwToken: string): UserState | null {
   if (!jwToken) return null;
   const payloadString = jwToken.split('.')[1];
   const decodedPayload = atob(payloadString);

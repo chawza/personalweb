@@ -3,7 +3,7 @@ import fs from 'fs';
 import { verifyUserAuth } from '../db/auth/user';
 
 const PRIVATE_KEY = fs.readFileSync(process.cwd() + '\\key\\private.pem')
-
+const TOKEN_EXPIRES_SPAN = 24 * 60 * 60; // One day
 type JwtPayload = {
   username: string,
   id: number
@@ -12,7 +12,7 @@ type JwtPayload = {
 
 async function createToken(username: string, password: string) {
   const { username: verifiedUsername, id } : JwtPayload = await verifyUserAuth(username, password);
-  const token = jwt.sign({ username: verifiedUsername, id }, PRIVATE_KEY);
+  const token = jwt.sign({ username: verifiedUsername, id }, PRIVATE_KEY, { expiresIn: TOKEN_EXPIRES_SPAN});
   return token;
 }
 
