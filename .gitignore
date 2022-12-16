@@ -39,6 +39,6 @@ next-env.d.ts
 
 # Local Directory
 media/img/*
-key
+key/*.pem
 public/images/*
 temp/img
