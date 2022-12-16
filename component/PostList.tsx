@@ -84,6 +84,9 @@ export default function PostList(props: postListProps) {
   const { isLoggedIn } = useContext(BlogContext);
   const { posts } = props;
   return <div>
-    {posts && posts.map((post, index) => renderPostRow(post, index, isLoggedIn))}
+    { posts
+      ? posts.map((post, index) => renderPostRow(post, index, isLoggedIn))
+      : <></>
+    }
   </div>
 }

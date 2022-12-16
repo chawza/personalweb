@@ -3,6 +3,7 @@
 const REGEX_PATTERN = {
   IMG_PATTERN: /!\[(.*)\]\((.*)\)/g,
   LINK_PATTERN: /(?<=]\().*(?=\))/,
+  HEADING_PATTERN : /#(.*)/,
   CUSTOM_LINK_PATTERN: (customText: string) => new RegExp(`(?<=]\\()${customText}(?=\\))`),
   CUSTOM_IMG_PATTERN: (imagePath: string) => new RegExp(`!\\[(.*)\\]\\(${imagePath}\\)`)
 }

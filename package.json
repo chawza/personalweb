@@ -7,7 +7,7 @@
     "build": "next build",
     "export": "next build && next export",
     "start": "set PORT=3000 && set NODE_ENV=production && node server.js",
-    "serve": "set PORT=3000 && set NODE_ENV=production && npm run build && node server.js",
+    "serve": "export PORT=3000 && export NODE_ENV=production && npm run build && node server.js",
     "lint": "next lint"
   },
   "dependencies": {

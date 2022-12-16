@@ -69,10 +69,11 @@ interface UploadPageProps {
 export default function UploadPage(props: UploadPageProps) {
   const { post } = props;
   const MODE = post ? UPDATE_MODE : CREATE_MODE;
-  const [ textState, setTextState] = useState('');
-  const [ tagInputState, setTagInputState] = useState('');
-  const [ tagState, setTagState ] = useState<string[]>(['']);
-  const [ uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  const [textState, setTextState] = useState('');
+  const [tagInputState, setTagInputState] = useState('');
+  const [tagState, setTagState] = useState<string[]>(['']);
+  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleTextChange(element: ChangeEvent<HTMLTextAreaElement>) {
     setTextState(element.target.value);
@@ -103,22 +104,18 @@ export default function UploadPage(props: UploadPageProps) {
     return newText;
   }
 
-
-  const findHeadingPattern = /#(.*)/
-
   function getPostTitle(mdFile: string) {
     const lines = mdFile.split('\n');
-    const heading = lines.find(line => findHeadingPattern.test(line));
+    const heading = lines.find(line => REGEX_PATTERN.HEADING_PATTERN.test(line));
     if (heading) {
       return heading.slice(1).trim()
     }
     return null;
   }
 
-
   async function handleAddNewPost(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-
+    setIsLoading(true);
     if (!textState) {
       alert("No content found!");
       return;
@@ -134,24 +131,17 @@ export default function UploadPage(props: UploadPageProps) {
         return
       }
 
-      try {
-        if (uploadFiles.length) {
-          const imgs = await uploadFilesInChunks(uploadFiles)
-          const matchedImage = uploadMdfile.matchAll(IMG_PATTERN);
-          for(let match of matchedImage) {
-            const imagePattern = match[0];
-            const filename = imagePattern.match(LINK_PATTERN);
-            if (!filename) continue;
-            const newImg = imgs.find(img => img.oldName == filename[0])
-            if (!newImg) continue;
-            imgFilenames.push(newImg.newName)
-            const newImagePattern = imagePattern.replace(filename[0], newImg.newName);
-            uploadMdfile = uploadMdfile.replace(imagePattern, newImagePattern);
-          }
-        }   
-      } catch (error) {
-        console.error(error);
-        throw new Error("Failed to upload Images");
+      const imgs = await uploadFilesInChunks(uploadFiles)
+      const matchedImage = uploadMdfile.matchAll(IMG_PATTERN);
+      for(let match of matchedImage) {
+        const imagePattern = match[0];
+        const filename = imagePattern.match(LINK_PATTERN);
+        if (!filename) continue;
+        const newImg = imgs.find(img => img.oldName == filename[0])
+        if (!newImg) continue;
+        imgFilenames.push(newImg.newName)
+        const newImagePattern = imagePattern.replace(filename[0], newImg.newName);
+        uploadMdfile = uploadMdfile.replace(imagePattern, newImagePattern);
       }
 
       const body = {
@@ -160,13 +150,18 @@ export default function UploadPage(props: UploadPageProps) {
         tag: tagState,
         imgFilenames: imgFilenames || null
       }
-
-      const response = await fetch('/api/blog/post', {
+      
+      const responsePost = await fetch('/api/blog/post', {
         body: JSON.stringify(body),
         method: 'POST',
         headers: cookHeader()
       });
-      const resBody = await response.json();
+
+      if (responsePost.status.toString()[0] !== '2') {
+        throw new Error('Failed to upload Post')
+      }
+
+      const resBody = await responsePost.json();
       const { message : _, postId } = resBody;
       setTimeout(() => Router.push(`/blog/article/${postId}`), 1000)
     }
@@ -177,6 +172,9 @@ export default function UploadPage(props: UploadPageProps) {
         alert(errmessage);
       }
       return;
+    }
+    finally {
+      setIsLoading(false)
     }
   };
 
@@ -235,16 +233,21 @@ export default function UploadPage(props: UploadPageProps) {
         headers: cookHeader() 
       });
 
+      if (res.status.toString()[0] !== '2')
+        throw new Error('Failed to upload chunk files');
+
       if (i == totalChunk - 1) {
         const { savedFilenames } = await res.json();
         responseNewFilenames = savedFilenames; 
       };
     };
+
     return responseNewFilenames;
   }
 
   async function handleUpdatePost(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
+    setIsLoading(true);
     if (!post){
       return
     }
@@ -288,15 +291,23 @@ export default function UploadPage(props: UploadPageProps) {
       if (updateRes.status.toString()[0] != '2') {
         console.error('Cannot update Post!');
         alert('cannot update post!');
-      } else {
+      }
+      else {
         const { message } = await updateRes.json();
         alert(message)
         Router.reload()
       }
     }
     catch (error) {
-      throw error 
+      if (error instanceof Error) {
+        console.error(error)
+        alert(error.message)
+      }
     }
+    finally {
+      setIsLoading(false);
+    }
+
   }
 
   function filenameIsExist(filename: string): boolean {
@@ -439,8 +450,8 @@ export default function UploadPage(props: UploadPageProps) {
 
           <div className={styles.submitArea}>
             {MODE == CREATE_MODE 
-              ? <button onClick={handleAddNewPost}>Add New Post</button>
-              : <button onClick={handleUpdatePost}>Update Post</button>
+              ? <button disabled={isLoading} onClick={handleAddNewPost}>Add New Post</button>
+              : <button disabled={isLoading} onClick={handleUpdatePost}>Update Post</button>
             }
           </div>
         </form>
