@@ -1,14 +1,12 @@
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import fs from 'fs';
+import jwt from 'jsonwebtoken';
 import { verifyUserAuth } from '../db/auth/user';
+import { PRIVATE_KEY } from '../setup';
 
-const PRIVATE_KEY = fs.readFileSync(process.cwd() + '\\key\\private.pem')
 const TOKEN_EXPIRES_SPAN = 24 * 60 * 60; // One day
 type JwtPayload = {
   username: string,
   id: number
 }
-
 
 async function createToken(username: string, password: string) {
   const { username: verifiedUsername, id } : JwtPayload = await verifyUserAuth(username, password);
