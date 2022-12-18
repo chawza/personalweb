@@ -1,6 +1,8 @@
 const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
+const fs = require('fs');
+const path = require('path');
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = 'localhost'
@@ -10,6 +12,16 @@ const port = parseInt(process.env.PORT);
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
+
+const srcDir = path.join(process.cwd(), 'public', 'imgs');
+const targetDir = path.join(process.cwd(), 'articles', 'imgs');
+
+console.log(srcDir);
+console.log(targetDir);
+
+fs.symlink(targetDir, srcDir, 'dir', (err) => {
+  if (err) throw err
+});
 
 app.prepare().then(() => {
   createServer(async (req, res) => {

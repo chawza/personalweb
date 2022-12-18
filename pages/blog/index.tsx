@@ -1,19 +1,30 @@
-import { getRecentPost } from "../../db/blog/post"
-import { Post } from '../../types/post'
+import matter from 'gray-matter';
 import { NextPage, GetStaticProps } from 'next';
 import PostList from '../../component/PostList';
-import { getUserIdByUsername } from "../../db/blog/user";
 import BlogLayout from "../../layout/BlogLayout";
-import { BLOG_OWNER_NAME } from "../../setup";
+import { getPostContentByFilename, getRecentPostFilename } from "../../lib/post";
+import { Post } from '../../types/post';
 
 interface blogPageProps {
-  posts: Post[]
+  posts: Post[] 
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const userId = await getUserIdByUsername(BLOG_OWNER_NAME)
-  const posts = await getRecentPost(userId, false);
-  return { props: { posts } };
+export const getStaticProps = async () => {
+  const recentFilenames = getRecentPostFilename(3);
+  const posts= recentFilenames.map((filename) => {
+    const mdfile = getPostContentByFilename(filename);
+    const { data, content } = matter(mdfile);
+    return {
+      slug: filename,
+      data,
+      content 
+    }
+  })
+  return {
+    props: {
+      posts 
+    }
+  }
 }
 
 const BlogPage: NextPage<blogPageProps> = (props) => {

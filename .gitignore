@@ -42,3 +42,9 @@ media/img/*
 key/*.pem
 public/images/*
 temp/images/*
+articles/*
+!articles/imgs
+!articles/docs.md
+articles/imgs/*
+!articles/imgs/docs.md
+public/imgs

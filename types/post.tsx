@@ -1,9 +1,7 @@
+import { PostFrontmatter } from "../lib/post";
+
 export interface Post {
-  id: string,
-  title: string,
-  author: string,
+  data: PostFrontmatter
   content: string,
-  add_date: Date,
-  last_edit: Date,
-  tag: string[] | null,
+  slug: string
 }

@@ -1,5 +1,4 @@
 import { GetStaticProps } from 'next';
-import Head from 'next/head'
 import Link from 'next/link';
 import Image from 'next/image';
 import { getRecentPost } from '../db/blog/post';
@@ -9,6 +8,8 @@ import styles from '../styles/home.module.css';
 import PageLayout from '../layout/PageLayout';
 import { getUserIdByUsername } from '../db/blog/user';
 import { BLOG_OWNER_NAME } from '../setup';
+import { getPostContentByFilename, getRecentPostFilename } from '../lib/post';
+import matter from 'gray-matter';
 
 type contactItem = {
   icon: string,
@@ -53,18 +54,26 @@ const renderContactItem = (contact: contactItem, index: number) => {
   </div>
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const userId = await getUserIdByUsername(BLOG_OWNER_NAME);
-  const posts = await getRecentPost(userId, false, 3);
+export const getStaticProps: GetStaticProps<{ posts: Post[]}> = async () => {
+  const recentFilenames = getRecentPostFilename(3);
+  const posts= recentFilenames.map((filename) => {
+    const mdfile = getPostContentByFilename(filename);
+    const { data, content } = matter(mdfile);
+    return {
+      slug: filename,
+      data,
+      content 
+    }
+  })
   return {
     props: {
-      posts
+      posts 
     }
   }
 }
 
 interface HomeProps {
-  posts: Post[]
+ posts: Post[] 
 }
 
 export default function Home(props: HomeProps) {
