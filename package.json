@@ -1,6 +1,6 @@
 {
   "name": "personalweb",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "export PORT=5000 && export NODE_ENV=development && node server.js",
