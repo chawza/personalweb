@@ -2,9 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  // images: {
-  //   unoptimized: true
-  // }
+  
 }
 
 // next.config.js
@@ -27,5 +25,8 @@ const withMDX = asd({
 export default withMDX({
   // Append the default value with md extensions
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  // images: {
+  //   unoptimized: true,
+  // }
 })
 
