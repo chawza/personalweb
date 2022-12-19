@@ -13,15 +13,14 @@ const port = parseInt(process.env.PORT);
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
 
-const srcDir = path.join(process.cwd(), 'public', 'imgs');
-const targetDir = path.join(process.cwd(), 'articles', 'imgs');
+const symLinkPath = path.join(process.cwd(), 'public', 'imgs');
+const linkTarget = path.join(process.cwd(), 'articles', 'imgs');
 
-console.log(srcDir);
-console.log(targetDir);
-
-fs.symlink(targetDir, srcDir, 'dir', (err) => {
-  if (err) throw err
-});
+if (!fs.existsSync(symLinkPath)) {
+  fs.symlink(linkTarget, symLinkPath, 'dir', (err) => {
+    if (err) throw err
+  });
+}
 
 app.prepare().then(() => {
   createServer(async (req, res) => {
