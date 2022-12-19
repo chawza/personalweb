@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "export PORT=5000 && export NODE_ENV=development && node server.js",
     "build": "next build",
-    "export": "export NODE_ENV=production && next build && next export",
-    "start": "set PORT=3000 && set NODE_ENV=production && node server.js",
-    "serve": "export PORT=80 && export NODE_ENV=production && npm run build && node server.js",
+    "export": "next build && next export",
+    "start": "export PORT=3000 && export NODE_ENV=production && node server.js",
+    "serve": "export PORT=5000 && export NODE_ENV=production && npm run build && node server.js",
     "lint": "next lint"
   },
   "dependencies": {
