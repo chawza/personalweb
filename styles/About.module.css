@@ -7,8 +7,13 @@
 }
 
 .AboutContainer h2 {
-  margin-top: 1re;
+  margin-top: 1rem;
 }
+
+.AboutContainer a {
+  text-decoration: underline;
+}
+
 .AboutContainer table {
   width: 100%;
 }
@@ -19,6 +24,16 @@
 
 .AboutContainer th {
   text-align: left;
+  padding: .25rem .5rem .25rem .5rem;
+  font-weight: 900;
+}
+
+.AboutContainer tbody tr:nth-child(odd) {
+  background-color: rgb(236, 236, 236);
+}
+
+.AboutContainer td {
+  padding: .25rem .5rem .25rem .5rem;
 }
 
 .AboutContainer a {

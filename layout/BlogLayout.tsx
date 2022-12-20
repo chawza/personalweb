@@ -19,6 +19,6 @@ export default function PageLayout(props: PageProps) {
         </Head>
         {children}
       </main>
-      <Footer/>
+      {/* <Footer/> */}
   </>
 }
