@@ -1,7 +1,7 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 
-const ARTICLES_DIR = `${process.cwd()}/articles`;
+import { ARTICLES_DIR, ARTICLES_IMGS_DIR } from '../setup';
 
 export type PostFrontmatter = {
   auhtor: string,
@@ -10,7 +10,7 @@ export type PostFrontmatter = {
 }
 
 export function getPostFilenames() {
-  const ignore = ['docs.md', 'imgs'];
+  const ignore = ['imgs'];
   const filenames = fs.readdirSync(ARTICLES_DIR);
   return filenames.filter(name => !ignore.includes(name));
 }

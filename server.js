@@ -13,16 +13,20 @@ const port = parseInt(process.env.PORT);
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
 
-const symLinkPath = path.join(process.cwd(), 'public', 'imgs');
-const linkTarget = path.join(process.cwd(), 'articles', 'imgs');
-
-if (!fs.existsSync(symLinkPath)) {
-  fs.symlink(linkTarget, symLinkPath, 'dir', (err) => {
-    if (err) throw err
-  });
+function setupImgSymlink() {
+  const symLinkPath = path.join(process.cwd(), 'public', 'imgs');
+  const linkTarget = process.env.ARTICLE_IMG_DIR;
+  
+  if (!fs.existsSync(symLinkPath)) {
+    fs.symlink(linkTarget, symLinkPath, 'dir', (err) => {
+      if (err) throw err
+    });
+    console.log(`Article imgs symlink has been created to ${linkTarget}`);
+  }
 }
 
 app.prepare().then(() => {
+  setupImgSymlink();
   createServer(async (req, res) => {
     try {
       // Be sure to pass `true` as the second argument to `url.parse`.

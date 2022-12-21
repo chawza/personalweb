@@ -1,16 +1,16 @@
-const BLOG_OWNER_NAME = (() => {
-  const name = process.env.BLOG_OWNER_USERNAME;
-  if (!name) throw new Error("Env BLOG_OWNER_USERANME is not found!");
+const ARTICLES_DIR = (() => {
+  const name = process.env.ARTICLE_MD_DIR;
+  if (!name) throw new Error("ARTICLE_MD_DIR variable not found!");
   return name
 })();
 
-const PRIVATE_KEY = (() => {
-  const name = process.env.PRIVATE_KEY_PEM;
-  if (!name) throw new Error("Private PEM key not found in PRIVATE_KEY_PEM env variablles");
+const ARTICLES_IMGS_DIR = (() => {
+  const name = process.env.ARTICLE_IMG_DIR;
+  if (!name) throw new Error("ARTICLE_IMG_DIR variable not found");
   return name
 })();
 
 export {
-  BLOG_OWNER_NAME,
-  PRIVATE_KEY
+  ARTICLES_DIR,
+  ARTICLES_IMGS_DIR
 }
