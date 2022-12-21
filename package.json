@@ -3,11 +3,11 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "export PORT=5000 && export NODE_ENV=development && node server.js",
-    "build": "next build",
+    "dev": "export PORT=3000 && export NODE_ENV=development && node server.js",
+    "build": "export NODE_ENV=production && next build",
     "export": "next build && next export",
-    "start": "export PORT=3000 && export NODE_ENV=production && node server.js",
-    "serve": "export PORT=5000 && export NODE_ENV=production && npm run build && node server.js",
+    "start": "export PORT=5000 && export NODE_ENV=production && node server.js",
+    "build-serve": "export PORT=5000 && export NODE_ENV=production && next build && node server.js",
     "lint": "next lint"
   },
   "dependencies": {

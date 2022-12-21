@@ -1,10 +1,10 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 
-import { ARTICLES_DIR, ARTICLES_IMGS_DIR } from '../setup';
+import { ARTICLES_DIR } from '../setup';
 
 export type PostFrontmatter = {
-  auhtor: string,
+  author: string,
   date: string,
   tags?: string[]
 }

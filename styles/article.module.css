@@ -1,0 +1,26 @@
+.postMetaContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.postMetaContainer .metaSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: end;
+}
+
+.postMetaContainer .metaSection:nth-child(2) {
+  text-align: end;
+}
+
+.postMetaContainer .postDate {
+  font-style: italic;
+  font-size: .9rem;
+  margin: 0;
+  opacity: 75%;
+}
+
+.postContent p {
+  text-align: justify;
+}

@@ -4,8 +4,8 @@ const next = require('next')
 const fs = require('fs');
 const path = require('path');
 
-const dev = process.env.NODE_ENV !== 'production'
-const hostname = 'localhost'
+const dev = process.env.NODE_ENV !== 'production';
+const hostname = 'localhost';
 
 const NODE_ENV = process.env.NODE_ENV;
 const port = parseInt(process.env.PORT); 
@@ -21,7 +21,7 @@ function setupImgSymlink() {
     fs.symlink(linkTarget, symLinkPath, 'dir', (err) => {
       if (err) throw err
     });
-    console.log(`Article imgs symlink has been created to ${linkTarget}`);
+    console.info(`Article imgs symlink has been created to ${linkTarget}`);
   }
 }
 

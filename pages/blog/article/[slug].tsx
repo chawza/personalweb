@@ -6,6 +6,8 @@ import { getPostContentByFilename, getPostFilenames, PostFrontmatter } from "../
 import matter from 'gray-matter'
 import { ConvertMdToHtml } from "../../../lib/md";
 import { DateFormat } from "../../../lib/stringlib";
+import styles from '../../../styles/article.module.css'
+import HTMLReactParser from "html-react-parser";
 
 const MESSAGE_NO_POST_FOUND = 'No Post found in /article directory!';
 
@@ -13,10 +15,15 @@ interface staticPropsParams extends ParsedUrlQuery{
     slug: string
 };
 
-function renderPostMetaData(tags: string[], date: Date) {
-  return <div>
-    <p>{DateFormat.CleanReadable(date)}</p>
-    { tags? <TagList tags={tags} /> : <></>}
+function renderPostMetaData(tags: string[], date: Date, author: string) {
+  return <div className={styles.postMetaContainer}>
+    <div className={styles.metaSection}>
+      { tags? <TagList tags={tags} /> : <></>}
+    </div>
+    <div className={styles.metaSection}>
+      <p className={styles.author}>by: {author}</p> 
+      <p className={styles.postDate}>{DateFormat.CleanReadable(date)}</p>
+    </div>
   </div>
 }
 
@@ -61,8 +68,10 @@ const ArticlePage: NextPage<PageParams> = (props: PageParams) => {
   // const tags = data.tags ? getArticleTags(data.tags) : [];
   return <PageLayout>
     <>
-      {renderPostMetaData(data.tags || [], new Date(data.date))}
-      <div dangerouslySetInnerHTML={{ __html: procesedMd}}></div>
+      {renderPostMetaData(data.tags || [], new Date(data.date), data.author)}
+      <div className={styles.postContent}>
+        {HTMLReactParser(procesedMd)}
+      </div>
     </>
   </PageLayout>
 };
