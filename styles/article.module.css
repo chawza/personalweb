@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .postMetaContainer .metaSection:nth-child(2) {
@@ -22,5 +22,13 @@
 }
 
 .postContent p {
+  text-align: justify;
+}
+
+.postContent img {
+  width: 100%;
+}
+
+.postContent code {
   text-align: justify;
 }

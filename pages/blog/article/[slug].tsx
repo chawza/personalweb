@@ -65,10 +65,15 @@ type PageParams = {
 const ArticlePage: NextPage<PageParams> = (props: PageParams) => {
   const { content, data } = props;
   const procesedMd = ConvertMdToHtml(content);
-  // const tags = data.tags ? getArticleTags(data.tags) : [];
   return <PageLayout>
     <>
-      {renderPostMetaData(data.tags || [], new Date(data.date), data.author)}
+      {
+        renderPostMetaData(
+          data.tags || [],
+          new Date(data.date),
+          data.author
+        )
+      }
       <div className={styles.postContent}>
         {HTMLReactParser(procesedMd)}
       </div>
