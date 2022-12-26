@@ -23,12 +23,21 @@
 
 .postContent p {
   text-align: justify;
+  line-height: 1.5rem;
 }
 
 .postContent img {
   width: 100%;
 }
 
-.postContent code {
-  text-align: justify;
+.postContent a {
+  text-decoration: underline;
+  color: blue;
+}
+
+.postContent pre code {
+  display: block;
+  padding: 1rem;
+  width: 100%;
+  overflow-x: scroll;
 }

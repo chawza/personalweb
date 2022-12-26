@@ -4,10 +4,9 @@ import PageLayout from "../../../layout/PageLayout";
 import TagList from "../../../component/TagList";
 import { getPostContentByFilename, getPostFilenames, PostFrontmatter } from "../../../lib/post";
 import matter from 'gray-matter'
-import { ConvertMdToHtml } from "../../../lib/md";
+import { ConvertMdToReactComponent } from "../../../lib/md";
 import { DateFormat } from "../../../lib/stringlib";
 import styles from '../../../styles/article.module.css'
-import HTMLReactParser from "html-react-parser";
 
 const MESSAGE_NO_POST_FOUND = 'No Post found in /article directory!';
 
@@ -64,7 +63,9 @@ type PageParams = {
 
 const ArticlePage: NextPage<PageParams> = (props: PageParams) => {
   const { content, data } = props;
-  const procesedMd = ConvertMdToHtml(content);
+  // const procesedMd = ConvertMdToHtml(content);
+  const mdComponent = ConvertMdToReactComponent(content);
+
   return <PageLayout>
     <>
       {
@@ -75,7 +76,8 @@ const ArticlePage: NextPage<PageParams> = (props: PageParams) => {
         )
       }
       <div className={styles.postContent}>
-        {HTMLReactParser(procesedMd)}
+        {/* {HTMLReactParser(procesedMd)} */}
+        { mdComponent }
       </div>
     </>
   </PageLayout>

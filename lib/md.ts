@@ -1,6 +1,7 @@
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
+import { useRemarkSync } from 'react-remark';
 
 const REGEX_PATTERN = {
   IMG_PATTERN: /!\[(.*)\]\((.*)\)/g,
@@ -18,6 +19,10 @@ const ConvertMdToHtml = (mdText: string) => {
   // let text = replaceImagePath(mdText, process.env.ARTICLE_IMG_DIR || './article/imgs');
   const processed = MarkdownConverter.processSync(mdText).toString();
   return processed
+}
+
+const ConvertMdToReactComponent = (mdText: string) => {
+  return useRemarkSync(mdText)
 }
 
 function getImgFilenamesFromMD(mdText: string): string[] {
@@ -52,5 +57,6 @@ export {
   getImgFilenamesFromMD,
   MarkdownConverter,
   ConvertMdToHtml,
-  replaceImagePath
+  replaceImagePath,
+  ConvertMdToReactComponent
 }
