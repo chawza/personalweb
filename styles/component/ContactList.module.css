@@ -1,0 +1,35 @@
+.contactContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+}
+
+@media screen and (max-width: 600px) {
+  .contactContainer {
+    flex-direction: column;
+    gap: 0px;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+  }
+}
+
+.contactContainer a {
+  text-decoration: none;
+}
+
+.contactItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contactItem div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+}

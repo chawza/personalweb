@@ -9,9 +9,18 @@ body {
 }
 
 .normalContainer {
+  display: flex;
+  flex-direction: column;
   width: 40rem;
   min-height: 80vh;
   margin-bottom: 20vh;
+}
+
+@media only screen and (max-width: 600px) {
+  .normalContainer {
+    width: 100vw;
+    margin: 0 1rem 0 1rem;
+  }
 }
 
 a {
@@ -26,4 +35,6 @@ a {
 .articleArea img {
   width: 100%;
   height: auto;
+
+
 }

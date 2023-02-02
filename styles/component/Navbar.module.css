@@ -1,15 +1,25 @@
+
 .navbarContainer {
-  width: 40rem;
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0 1rem 0;
+}
+
+.navbarList {
+  width: 100%;
   margin: auto;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
   column-gap: 40px;
-  padding: 1rem 0 1rem 0;
 }
 
 .navbarItem {
+  font-size: 2.5em;
+}
+
+.navbarLogo {
   font-size: 2.5em;
 }
 
@@ -21,3 +31,44 @@
   flex-grow: 4;
 }
 
+.navBurgerBtn {
+  visibility: hidden;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+
+  .navbarList {
+    visibility: hidden; 
+  }
+
+  .navbarListExpand {
+    visibility: visible;
+    opacity: 80%;
+    position: fixed;
+    left: 0; 
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+    padding-right: 2rem;
+    gap: 2rem;
+    background-color: lightgray;
+  }
+
+  .navBurgerBtn {
+    visibility: visible;
+    display: block;
+    margin-left: auto;
+    margin-right: 2rem;
+    cursor: pointer;
+  }
+
+  .navExpandedBtn {
+    visibility: visible;
+    cursor: pointer;
+  }
+}

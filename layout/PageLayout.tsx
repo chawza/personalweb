@@ -9,14 +9,14 @@ interface PageProps {
 
 export default function PageLayout(props: PageProps) {
   const { children } = props;
-  return <>
+  return <div className='normalContainer'>
+    <Head>
+      <title>Nabeel</title>
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
     <Navbar/>
-    <main className='normalContainer'>
-      <Head>
-        <title>Nabeel</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <main>
       {children}
     </main>
-  </>
+  </div>
 }

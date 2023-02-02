@@ -41,5 +41,5 @@ next-env.d.ts
 media/img/*
 key/*.pem
 public/images/*
-temp/images/*
+temp/
 public/imgs
