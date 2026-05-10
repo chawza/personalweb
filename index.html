@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nabeel KM — Fullstack Engineer</title>
+  <meta name="description" content="Fullstack engineer building desktop apps with Rust & Go">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: #222;
+      --text: #e0e0e0;
+      --text-dim: #888;
+      --accent: #7c9a6e;
+      --accent-dim: #5a7a4e;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6rem 1.5rem 4rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 540px;
+      width: 100%;
+    }
+
+    /* Header */
+    header { margin-bottom: 3rem; }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .bio {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Projects */
+    .projects { margin-bottom: 3rem; }
+
+    .projects h2 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 1.25rem;
+    }
+
+    .card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--accent-dim); }
+
+    .card-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-lang {
+      font-size: 0.65rem;
+      font-weight: 500;
+      background: var(--border);
+      color: var(--text-dim);
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      letter-spacing: 0.02em;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    footer a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    /* Minimal responsive */
+    @media (max-width: 480px) {
+      body { padding: 4rem 1rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Nabeel KM</h1>
+      <p class="bio">Fullstack engineer building desktop apps with Rust &amp; Go</p>
+    </header>
+
+    <section class="projects">
+      <h2>Projects</h2>
+
+      <a class="card" href="https://github.com/chawza/menote" target="_blank" rel="noopener">
+        <div class="card-name">
+          MeNote
+          <span class="card-lang">Rust · Svelte</span>
+        </div>
+        <p class="card-desc">Desktop note-taking app built with Tauri</p>
+      </a>
+
+      <a class="card" href="https://github.com/chawza/memos-cli" target="_blank" rel="noopener">
+        <div class="card-name">
+          memos-cli
+          <span class="card-lang">Go</span>
+        </div>
+        <p class="card-desc">CLI for the Memos API — manage self-hosted notes from the terminal</p>
+      </a>
+
+      <a class="card" href="https://github.com/chawza/todo-rust" target="_blank" rel="noopener">
+        <div class="card-name">
+          todo-rust
+          <span class="card-lang">Rust</span>
+        </div>
+        <p class="card-desc">Todo app — exploring Rust for everyday tools</p>
+      </a>
+    </section>
+
+    <footer>
+      <a href="https://github.com/chawza" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+  </div>
+</body>
+</html>
